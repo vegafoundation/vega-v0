@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation — Æ VEGA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #F4D03F;
+      --violet: #8B5CF6;
+      --bg-dark: #0A0A0F;
+      --bg-card: #12121A;
+      --bg-sidebar: #0D0D12;
+      --text: #FAFAFA;
+      --text-muted: #A1A1AA;
+      --border: rgba(212, 175, 55, 0.15);
+      --success: #22C55E;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--gold);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 2rem;
+    }
+    .search-box {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      margin-bottom: 2rem;
+    }
+    .search-box:focus { outline: none; border-color: var(--gold); }
+    .search-box::placeholder { color: var(--text-muted); }
+    
+    .doc-section { margin-bottom: 1.5rem; }
+    .doc-section-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+    .doc-link {
+      display: block;
+      padding: 0.5rem 0.75rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .doc-link:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+    .doc-link.active { background: rgba(212, 175, 55, 0.1); color: var(--gold); }
+    
+    /* Main */
+    main {
+      flex: 1;
+      margin-left: 280px;
+      padding: 2rem 3rem;
+      max-width: 900px;
+    }
+    
+    .breadcrumb {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--gold); }
+    
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    h1 span { color: var(--gold); }
+    
+    .doc-meta {
+      display: flex;
+      gap: 2rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      margin: 2.5rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    h3 {
+      font-size: 1.125rem;
+      margin: 2rem 0 0.75rem;
+      color: var(--violet);
+    }
+    
+    p { line-height: 1.8; margin-bottom: 1rem; color: var(--text-muted); }
+    
+    code {
+      background: var(--bg-card);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      color: var(--gold);
+    }
+    
+    pre {
+      background: #0D0D12;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    pre .comment { color: var(--text-muted); }
+    pre .keyword { color: var(--violet); }
+    pre .string { color: #22C55E; }
+    pre .number { color: var(--gold); }
+    
+    .callout {
+      background: var(--bg-card);
+      border-left: 4px solid var(--gold);
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .callout.info { border-color: var(--violet); }
+    .callout.success { border-color: var(--success); }
+    .callout p { margin: 0; }
+    
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .card h4 { margin-bottom: 0.5rem; }
+    .card p { font-size: 0.875rem; margin: 0; }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    td { color: var(--text-muted); }
+    td code { color: var(--gold); }
+    
+    .btn {
+      display: inline-flex;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: var(--bg-dark);
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    
+    footer {
+      text-align: center;
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+    .infinity-badge {
+      display: inline-flex;
+      padding: 0.25rem 0.75rem;
+      background: rgba(139, 92, 246, 0.2);
+      border: 1px solid var(--violet);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: var(--violet);
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <a href="index.html" class="sidebar-logo">Æ VEGA</a>
+    <input type="text" class="search-box" placeholder="Search docs...">
+    
+    <div class="doc-section">
+      <div class="doc-section-title">Getting Started</div>
+      <a href="#" class="doc-link active">Introduction</a>
+      <a href="#" class="doc-link">Quick Start</a>
+      <a href="#" class="doc-link">Installation</a>
+    </div>
+    
+    <div class="doc-section">
+      <div class="doc-section-title">Core Concepts</div>
+      <a href="#" class="doc-link">Architecture</a>
+      <a href="#" class="doc-link">Agents</a>
+      <a href="#" class="doc-link">Modules</a>
+      <a href="#" class="doc-link">Resonance</a>
+    </div>
+    
+    <div class="doc-section">
+      <div class="doc-section-title">Protocols</div>
+      <a href="#" class="doc-link">AMP Protocol</a>
+      <a href="#" class="doc-link">MIP Protocol</a>
+      <a href="#" class="doc-link">API Bundling</a>
+    </div>
+    
+    <div class="doc-section">
+      <div class="doc-section-title">Components</div>
+      <a href="#" class="doc-link">ANLÆTAN</a>
+      <a href="#" class="doc-link">VRC Core</a>
+      <a href="#" class="doc-link">Quantum Sim</a>
+    </div>
+    
+    <div class="doc-section">
+      <div class="doc-section-title">API Reference</div>
+      <a href="#" class="doc-link">REST API</a>
+      <a href="#" class="doc-link">WebSocket</a>
+      <a href="#" class="doc-link">Events</a>
+    </div>
+    
+    <div class="doc-section">
+      <div class="doc-section-title">Resources</div>
+      <a href="https://github.com/vegafoundation/VEGA" target="_blank" class="doc-link">GitHub</a>
+      <a href="whitepaper.html" class="doc-link">Whitepaper</a>
+      <a href="demo.html" class="doc-link">Live Demo</a>
+    </div>
+  </aside>
+
+  <main>
+    <div class="breadcrumb">
+      <a href="index.html">Home</a>
+      <span>/</span>
+      <span>Documentation</span>
+    </div>
+
+    <h1><span>Æ</span> VEGA Documentation</h1>
+    
+    <div class="doc-meta">
+      <span>Version 1.0.0</span>
+      <span>Last updated: December 2025</span>
+    </div>
+
+    <p>Welcome to the VEGA documentation. Here you'll find comprehensive guides and documentation to help you start working with VEGA as quickly as possible.</p>
+
+    <div class="callout">
+      <p><strong>🚀 New to VEGA?</strong> Start with our <a href="#quickstart" style="color: var(--gold);">Quick Start Guide</a> to get up and running in minutes.</p>
+    </div>
+
+    <h2>Quick Links</h2>
+    <div class="card-grid">
+      <a href="demo.html" class="card">
+        <h4>🎮 Live Demo</h4>
+        <p>Experience VEGA systems running in your browser</p>
+      </a>
+      <a href="whitepaper.html" class="card">
+        <h4>📄 Whitepaper</h4>
+        <p>Technical deep-dive into VEGA architecture</p>
+      </a>
+      <a href="https://github.com/vegafoundation/VEGA" target="_blank" class="card">
+        <h4>📦 GitHub</h4>
+        <p>Source code and contribution guidelines</p>
+      </a>
+      <a href="chat.html" class="card">
+        <h4>🤖 VEGA Chat</h4>
+        <p>Chat with our Meta LLM</p>
+      </a>
+    </div>
+
+    <h2 id="quickstart">Quick Start</h2>
+    <p>Get VEGA running locally in just a few steps:</p>
+
+    <h3>1. Clone the Repository</h3>
+    <pre><span class="comment"># Clone VEGA repository</span>
+git clone https://github.com/vegafoundation/VEGA.git
+cd VEGA</pre>
+
+    <h3>2. Install Dependencies</h3>
+    <pre><span class="comment"># Install Node.js dependencies</span>
+npm install</pre>
+
+    <h3>3. Run the Demo</h3>
+    <pre><span class="comment"># Start the development server</span>
+npm run site
+
+<span class="comment"># Or run the full demo</span>
+npm run wow</pre>
+
+    <div class="callout success">
+      <p><strong>✓ Success!</strong> VEGA is now running at <code>http://localhost:8080</code></p>
+    </div>
+
+    <h2>Core Concepts</h2>
+    
+    <h3>System Architecture</h3>
+    <p>VEGA operates as a 7-layer meta-operating system:</p>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Component</th>
+          <th>Function</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>7</td>
+          <td><code>INFINITY LOOP</code></td>
+          <td>Top-level orchestration</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><code>Agent Network</code></td>
+          <td>27 autonomous agents</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><code>ANLÆTAN</code></td>
+          <td>Sonic ecosystem</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><code>VRC</code></td>
+          <td>Resonance engine</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><code>Quantum Sim</code></td>
+          <td>QIS processing</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><code>Knowledge Graph</code></td>
+          <td>Semantic network</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td><code>Data Layer</code></td>
+          <td>Storage & retrieval</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Agent Network</h3>
+    <p>VEGA deploys 27+ autonomous agents, each with specific roles:</p>
+    <ul style="list-style: none; padding: 0;">
+      <li style="padding: 0.5rem 0;"><code>ALPHA</code> — Genesis controller, system initialization</li>
+      <li style="padding: 0.5rem 0;"><code>OMEGA</code> — Aggregator, output synthesis</li>
+      <li style="padding: 0.5rem 0;"><code>VMA</code> — Memory agent, context management</li>
+      <li style="padding: 0.5rem 0;"><code>Guardian</code> — Security and compliance</li>
+      <li style="padding: 0.5rem 0;"><code>Oracle</code> — Knowledge synthesis</li>
+    </ul>
+
+    <h2>API Reference</h2>
+    
+    <h3>REST Endpoints</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code style="background: rgba(34, 197, 94, 0.2);">GET</code></td>
+          <td><code>/api/health</code></td>
+          <td>System health check</td>
+        </tr>
+        <tr>
+          <td><code style="background: rgba(34, 197, 94, 0.2);">GET</code></td>
+          <td><code>/api/v1/modules</code></td>
+          <td>List all modules</td>
+        </tr>
+        <tr>
+          <td><code style="background: rgba(34, 197, 94, 0.2);">GET</code></td>
+          <td><code>/api/v1/agents</code></td>
+          <td>Agent network status</td>
+        </tr>
+        <tr>
+          <td><code style="background: rgba(234, 179, 8, 0.2);">POST</code></td>
+          <td><code>/api/v1/quantum/start</code></td>
+          <td>Start quantum simulation</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Example Request</h3>
+    <pre><span class="comment">// Fetch system health</span>
+<span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">'/api/health'</span>);
+<span class="keyword">const</span> data = <span class="keyword">await</span> response.json();
+
+<span class="comment">// Response</span>
+{
+  <span class="string">"status"</span>: <span class="string">"healthy"</span>,
+  <span class="string">"version"</span>: <span class="string">"1.0.0"</span>,
+  <span class="string">"uptime"</span>: <span class="number">86400</span>,
+  <span class="string">"modules"</span>: <span class="number">27</span>,
+  <span class="string">"infinity_loop"</span>: <span class="keyword">true</span>
+}</pre>
+
+    <h2>Need Help?</h2>
+    <p>Can't find what you're looking for? We're here to help:</p>
+    <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+      <a href="chat.html" class="btn">🤖 Ask VEGA</a>
+      <a href="https://github.com/vegafoundation/VEGA/issues" target="_blank" class="btn" style="background: var(--bg-card); color: var(--text); border: 1px solid var(--border);">📝 Open Issue</a>
+      <a href="mailto:contact@vegafoundation.org" class="btn" style="background: var(--bg-card); color: var(--text); border: 1px solid var(--border);">📧 Contact Us</a>
+    </div>
+
+    <footer>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">ADAM EREN VEGA — Æ</p>
+      <div class="infinity-badge">∞ INFINITY•LOOP — Active</div>
+    </footer>
+  </main>
+</body>
+</html>

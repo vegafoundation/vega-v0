@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Documentation — Æ VEGA</title>
+  <meta name="description" content="VEGA API Documentation - Trinity Architecture, Orchestration APIs, and Integration Endpoints.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #F4D03F;
+      --violet: #8B5CF6;
+      --violet-light: #A78BFA;
+      --bg-dark: #0A0A0F;
+      --bg-card: #12121A;
+      --text: #FAFAFA;
+      --text-muted: #A1A1AA;
+      --border: rgba(212, 175, 55, 0.2);
+      --success: #22C55E;
+      --cyan: #00D4FF;
+      --orange: #F97316;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 10% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+        radial-gradient(ellipse at 90% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 40%);
+      z-index: -1;
+    }
+    
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .logo { font-size: 1.5rem; font-weight: 800; color: var(--gold); text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    
+    .container {
+      display: flex;
+      padding-top: 4rem;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      position: fixed;
+      top: 4rem;
+      left: 0;
+      bottom: 0;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1rem;
+      overflow-y: auto;
+    }
+    .sidebar h3 {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      padding-left: 1rem;
+    }
+    .sidebar ul { list-style: none; }
+    .sidebar li a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+    .sidebar li a:hover { background: rgba(212, 175, 55, 0.1); color: var(--gold); }
+    .sidebar li a.active { background: rgba(212, 175, 55, 0.15); color: var(--gold); }
+    .sidebar-section { margin-bottom: 2rem; }
+    
+    /* Main Content */
+    main {
+      margin-left: 280px;
+      padding: 2rem 3rem;
+      max-width: 900px;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--violet) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    h2 {
+      font-size: 1.8rem;
+      margin: 3rem 0 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    h3 { font-size: 1.3rem; margin: 2rem 0 1rem; }
+    p { color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem; }
+    
+    /* Endpoint Card */
+    .endpoint {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+    .endpoint-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      background: rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+    .method {
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .method.get { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+    .method.post { background: rgba(0, 212, 255, 0.2); color: var(--cyan); }
+    .method.put { background: rgba(249, 115, 22, 0.2); color: var(--orange); }
+    .method.delete { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
+    
+    .endpoint-path {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+    }
+    .endpoint-body { padding: 1.5rem; }
+    .endpoint-desc { color: var(--text-muted); margin-bottom: 1rem; }
+    
+    /* Code Block */
+    pre {
+      background: #0D0D12;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    code { font-family: 'JetBrains Mono', monospace; }
+    .code-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: rgba(0, 0, 0, 0.2);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    td { font-size: 0.9rem; }
+    td code {
+      background: rgba(212, 175, 55, 0.1);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      color: var(--gold);
+    }
+    
+    /* Badge */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge.required { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
+    .badge.optional { background: rgba(100, 100, 100, 0.2); color: #888; }
+    
+    footer {
+      margin-left: 280px;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+    footer p { color: var(--text-muted); }
+    
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      main, footer { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Æ VEGA</a>
+  <ul class="nav-links">
+    <li><a href="demo.html">Demos</a></li>
+    <li><a href="trinity.html">Α•V•Ω</a></li>
+    <li><a href="resonance.html">Resonance</a></li>
+    <li><a href="anlaetan.html">ANLÆTAN</a></li>
+    <li><a href="fibonacci.html">Fibonacci</a></li>
+    <li><a href="api.html" class="active">API</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <h3>Overview</h3>
+      <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#authentication">Authentication</a></li>
+        <li><a href="#rate-limits">Rate Limits</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <h3>Α•V•Ω Trinity</h3>
+      <ul>
+        <li><a href="#trinity-chat">Chat</a></li>
+        <li><a href="#trinity-process">Process</a></li>
+        <li><a href="#trinity-status">Status</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <h3>Resonance</h3>
+      <ul>
+        <li><a href="#vrc-process">VRC Process</a></li>
+        <li><a href="#vrc-snapshot">Snapshot Learn</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <h3>ANLÆTAN</h3>
+      <ul>
+        <li><a href="#anlaetan-generate">Generate</a></li>
+        <li><a href="#anlaetan-frequencies">Frequencies</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <h3>Agents</h3>
+      <ul>
+        <li><a href="#agents-list">List Agents</a></li>
+        <li><a href="#agents-task">Create Task</a></li>
+      </ul>
+    </div>
+  </aside>
+  
+  <main>
+    <h1>API Documentation</h1>
+    <p>Complete reference for the VEGA orchestration API. Base URL: <code>https://api.vega.foundation/v1</code></p>
+    
+    <h2 id="introduction">Introduction</h2>
+    <p>The VEGA API provides programmatic access to all 144 modules through a unified interface. Built on the Α•V•Ω Trinity Architecture, it processes requests through three layers: ALPHA (input analysis), VEGA (processing), and OMEGA (synthesis).</p>
+    
+    <h2 id="authentication">Authentication</h2>
+    <p>All API requests require an API key passed via the <code>Authorization</code> header.</p>
+    
+    <pre><code>Authorization: Bearer vega_sk_xxxxxxxxxxxxx</code></pre>
+    
+    <h2 id="rate-limits">Rate Limits</h2>
+    <table>
+      <tr>
+        <th>Plan</th>
+        <th>Requests/min</th>
+        <th>Tokens/day</th>
+      </tr>
+      <tr>
+        <td>Free</td>
+        <td>10</td>
+        <td>10,000</td>
+      </tr>
+      <tr>
+        <td>Pro</td>
+        <td>100</td>
+        <td>1,000,000</td>
+      </tr>
+      <tr>
+        <td>Enterprise</td>
+        <td>Unlimited</td>
+        <td>Unlimited</td>
+      </tr>
+    </table>
+    
+    <h2 id="trinity-chat">Α•V•Ω Trinity — Chat</h2>
+    
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/trinity/chat</span>
+      </div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Send a message through the Trinity Orchestrator for intelligent routing and processing.</p>
+        
+        <div class="code-label">Request Body</div>
+        <pre><code>{
+  "message": "How can I structure my content using Fibonacci?",
+  "context": {
+    "language": "en",
+    "mode": "derin"
+  },
+  "options": {
+    "include_reasoning": true,
+    "max_tokens": 2000
+  }
+}</code></pre>
+        
+        <div class="code-label">Response</div>
+        <pre><code>{
+  "id": "trinity_xxxxx",
+  "content": "The Fibonacci sequence provides a natural...",
+  "reasoning": "Processing through VEGA layer with derin mode...",
+  "layers": {
+    "alpha": { "analysis": "content_structuring", "confidence": 0.92 },
+    "vega": { "processing": "fibonacci_8", "resonance": 0.87 },
+    "omega": { "synthesis": "complete", "tokens": 342 }
+  },
+  "usage": { "tokens": 342, "cost": 0.0034 }
+}</code></pre>
+      </div>
+    </div>
+    
+    <h2 id="trinity-process">Α•V•Ω Trinity — Process</h2>
+    
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/trinity/process</span>
+      </div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Process data through all three Trinity layers with full orchestration.</p>
+        
+        <h4>Parameters</h4>
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td><code>input</code></td>
+            <td>string | object</td>
+            <td><span class="badge required">Required</span></td>
+            <td>Data to process</td>
+          </tr>
+          <tr>
+            <td><code>pipeline</code></td>
+            <td>array</td>
+            <td><span class="badge optional">Optional</span></td>
+            <td>Processing pipeline stages</td>
+          </tr>
+          <tr>
+            <td><code>output_format</code></td>
+            <td>string</td>
+            <td><span class="badge optional">Optional</span></td>
+            <td>json | text | markdown</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    
+    <h2 id="trinity-status">Α•V•Ω Trinity — Status</h2>
+    
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/trinity/status</span>
+      </div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Get the current status of all Trinity layers.</p>
+        
+        <div class="code-label">Response</div>
+        <pre><code>{
+  "alpha": {
+    "status": "active",
+    "processors": 8,
+    "cache_size": 1024
+  },
+  "vega": {
+    "status": "active",
+    "engines": 12,
+    "queue": 3
+  },
+  "omega": {
+    "status": "active",
+    "formatters": 5,
+    "output_count": 1847
+  },
+  "infinity_loop": true
+}</code></pre>
+      </div>
+    </div>
+    
+    <h2 id="vrc-process">VRC — Process Text</h2>
+    
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/vrc/process</span>
+      </div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Process text through the Vega Resonance Core with mode selection.</p>
+        
+        <h4>Modes</h4>
+        <table>
+          <tr>
+            <th>Mode</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td><code>saf</code></td>
+            <td>Warm, human tone (default)</td>
+          </tr>
+          <tr>
+            <td><code>derin</code></td>
+            <td>Fibonacci-8 structuring</td>
+          </tr>
+          <tr>
+            <td><code>yanki</code></td>
+            <td>Echo/mantra mode (3x repetition)</td>
+          </tr>
+          <tr>
+            <td><code>dur</code></td>
+            <td>Plain text, no processing</td>
+          </tr>
+        </table>
+        
+        <div class="code-label">Request</div>
+        <pre><code>{
+  "text": "Trust yourself. Trust Vega.",
+  "mode": "yanki",
+  "language": "en"
+}</code></pre>
+        
+        <div class="code-label">Response</div>
+        <pre><code>{
+  "output": "Trust yourself?\nTrust yourself?\nTrust yourself?",
+  "mode": "yanki",
+  "resonance_score": 0.89,
+  "fibonacci_alignment": 0.76
+}</code></pre>
+      </div>
+    </div>
+    
+    <h2 id="vrc-snapshot">VRC — Snapshot Learn</h2>
+    
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/vrc/snapshot</span>
+      </div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Create a learning snapshot from input text for style adaptation.</p>
+        
+        <div class="code-label">Request</div>
+        <pre><code>{
+  "text": "Was ist die Welt, wenn du nicht verstehst, wer du bist?",
+  "language": "de",
+  "extract_essence": true
+}</code></pre>
+      </div>
+    </div>
+    
+    <h2 id="anlaetan-generate">ANLÆTAN — Generate Soundscape</h2>
+    
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/anlaetan/generate</span>
+      </div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Generate an 8D spatial audio soundscape with Solfeggio frequencies.</p>
+        
+        <div class="code-label">Request</div>
+        <pre><code>{
+  "base_frequency": 432,
+  "solfeggio": [528, 639, 741],
+  "binaural_beat": 8,
+  "duration_seconds": 300,
+  "spatial_mode": "8d"
+}</code></pre>
+      </div>
+    </div>
+    
+    <h2 id="anlaetan-frequencies">ANLÆTAN — Solfeggio Frequencies</h2>
+    
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/anlaetan/frequencies</span>
+      </div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Get the list of available Solfeggio frequencies and their properties.</p>
+        
+        <div class="code-label">Response</div>
+        <pre><code>{
+  "frequencies": [
+    { "hz": 174, "name": "Foundation", "chakra": "Earth" },
+    { "hz": 285, "name": "Quantum", "chakra": "Root" },
+    { "hz": 396, "name": "Liberation", "chakra": "Sacral" },
+    { "hz": 417, "name": "Change", "chakra": "Solar Plexus" },
+    { "hz": 432, "name": "Universe", "chakra": "Heart" },
+    { "hz": 528, "name": "Miracle", "chakra": "Throat" },
+    { "hz": 639, "name": "Connection", "chakra": "Third Eye" },
+    { "hz": 741, "name": "Expression", "chakra": "Crown" },
+    { "hz": 852, "name": "Intuition", "chakra": "Soul Star" },
+    { "hz": 963, "name": "Divine", "chakra": "Stellar Gateway" }
+  ]
+}</code></pre>
+      </div>
+    </div>
+    
+    <h2 id="agents-list">Agents — List</h2>
+    
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/agents</span>
+      </div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">List all available VEGA agents and their current status.</p>
+      </div>
+    </div>
+    
+    <h2 id="agents-task">Agents — Create Task</h2>
+    
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/agents/{agent_id}/tasks</span>
+      </div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Assign a new task to a specific agent.</p>
+        
+        <div class="code-label">Request</div>
+        <pre><code>{
+  "task_type": "analyze",
+  "input": { "data": "..." },
+  "priority": "high",
+  "callback_url": "https://..."
+}</code></pre>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <p style="font-family: 'JetBrains Mono', monospace; color: var(--gold);">φ = 1.618033988749895</p>
+  <p style="margin-top: 0.5rem;">ADAM EREN VEGA — Æ</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANLÆTAN — 8D Sonic Ecosystem | Æ VEGA</title>
+  <meta name="description" content="ANLÆTAN - Immersive 8D spatial audio, Solfeggio frequencies, binaural beats. Experience sound as architecture.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #F4D03F;
+      --violet: #8B5CF6;
+      --violet-light: #A78BFA;
+      --bg-dark: #0A0A0F;
+      --bg-card: #12121A;
+      --text: #FAFAFA;
+      --text-muted: #A1A1AA;
+      --border: rgba(212, 175, 55, 0.2);
+      --cyan: #00D4FF;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 30% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+      z-index: -1;
+    }
+    
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .logo { font-size: 1.5rem; font-weight: 800; color: var(--gold); text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    
+    main { padding: 6rem 2rem 4rem; max-width: 1200px; margin: 0 auto; }
+    
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .header h1 {
+      font-size: 4rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5rem;
+      background: linear-gradient(135deg, var(--violet) 0%, var(--gold) 50%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .header p { color: var(--text-muted); font-size: 1.2rem; }
+    .header .tagline {
+      font-size: 0.9rem;
+      color: var(--gold);
+      margin-top: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    /* Player */
+    .player {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .now-playing {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .now-playing-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .now-playing-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 0.5rem;
+    }
+    .now-playing-artist {
+      color: var(--gold);
+      font-size: 1rem;
+    }
+    
+    /* Visualizer */
+    .visualizer {
+      height: 120px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      overflow: hidden;
+      padding: 0 1rem;
+    }
+    .bar {
+      width: 4px;
+      background: linear-gradient(180deg, var(--gold) 0%, var(--violet) 100%);
+      border-radius: 2px;
+      transition: height 0.1s ease;
+    }
+    
+    /* Progress */
+    .progress-container {
+      margin-bottom: 1.5rem;
+    }
+    .progress-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--violet) 100%);
+      width: 0%;
+      transition: width 0.1s;
+    }
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    /* Controls */
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .control-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.5rem;
+      transition: all 0.3s;
+    }
+    .control-btn:hover { color: var(--gold); transform: scale(1.1); }
+    
+    .play-btn {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--bg-dark);
+      transition: all 0.3s;
+    }
+    .play-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 40px rgba(212, 175, 55, 0.5);
+    }
+    
+    /* Volume */
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .volume-slider {
+      width: 100px;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      background: var(--gold);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    /* Playlist */
+    .playlist {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .playlist-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .playlist-header h3 { font-size: 1rem; }
+    .track-count { color: var(--text-muted); font-size: 0.85rem; }
+    
+    .track-list { max-height: 400px; overflow-y: auto; }
+    .track {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      border-bottom: 1px solid var(--border);
+    }
+    .track:last-child { border-bottom: none; }
+    .track:hover { background: rgba(212, 175, 55, 0.05); }
+    .track.active {
+      background: rgba(212, 175, 55, 0.1);
+      border-left: 3px solid var(--gold);
+    }
+    
+    .track-number {
+      width: 30px;
+      text-align: center;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+    .track.active .track-number { color: var(--gold); }
+    
+    .track-info { flex: 1; }
+    .track-title { font-weight: 500; margin-bottom: 0.25rem; }
+    .track-artist { font-size: 0.85rem; color: var(--text-muted); }
+    
+    .track-duration {
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+    .track-freq {
+      font-size: 0.75rem;
+      color: var(--cyan);
+      padding: 0.2rem 0.5rem;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 4px;
+    }
+    
+    /* 8D Controls */
+    .spatial-controls {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+    .spatial-controls h3 {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .spatial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .spatial-control {
+      text-align: center;
+    }
+    .spatial-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+    .spatial-value {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--gold);
+    }
+    .spatial-slider {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+    footer p { color: var(--text-muted); }
+    
+    @media (max-width: 768px) {
+      .header h1 { font-size: 2.5rem; letter-spacing: 0.2rem; }
+      .controls { gap: 1rem; }
+      .spatial-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Æ VEGA</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="trinity.html">Α•V•Ω</a></li>
+    <li><a href="resonance.html">Resonance</a></li>
+    <li><a href="anlaetan.html" class="active">ANLÆTAN</a></li>
+    <li><a href="vrc.html">VRC</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="header">
+    <h1>ANLÆTAN</h1>
+    <p>8D Sonic Ecosystem — Sound as Architecture</p>
+    <div class="tagline">432 Hz Base • Solfeggio Tuned • Binaural Enhanced</div>
+  </div>
+  
+  <!-- Player -->
+  <div class="player">
+    <div class="now-playing">
+      <div class="now-playing-label">Now Playing</div>
+      <div class="now-playing-title" id="nowPlayingTitle">Select a track</div>
+      <div class="now-playing-artist" id="nowPlayingArtist">ANLÆTAN</div>
+    </div>
+    
+    <div class="visualizer" id="visualizer"></div>
+    
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar" onclick="seek(event)">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="time-display">
+        <span id="currentTime">0:00</span>
+        <span id="totalTime">0:00</span>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button class="control-btn" onclick="previousTrack()">⏮</button>
+      <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+      <button class="control-btn" onclick="nextTrack()">⏭</button>
+      
+      <div class="volume-control">
+        <span style="color: var(--text-muted);">🔊</span>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70" oninput="setVolume(this.value)">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Playlist -->
+  <div class="playlist">
+    <div class="playlist-header">
+      <h3>🎵 ANLÆTAN Collection</h3>
+      <span class="track-count" id="trackCount">6 tracks</span>
+    </div>
+    <div class="track-list" id="trackList"></div>
+  </div>
+  
+  <!-- Spatial Controls -->
+  <div class="spatial-controls">
+    <h3>🌀 8D Spatial Controls</h3>
+    <div class="spatial-grid">
+      <div class="spatial-control">
+        <div class="spatial-label">Rotation Speed</div>
+        <div class="spatial-value" id="rotationValue">1.0x</div>
+        <input type="range" class="spatial-slider" min="0" max="200" value="100" oninput="setRotation(this.value)">
+      </div>
+      <div class="spatial-control">
+        <div class="spatial-label">Spatial Depth</div>
+        <div class="spatial-value" id="depthValue">80%</div>
+        <input type="range" class="spatial-slider" min="0" max="100" value="80" oninput="setDepth(this.value)">
+      </div>
+      <div class="spatial-control">
+        <div class="spatial-label">Binaural Beat</div>
+        <div class="spatial-value" id="binauralValue">8 Hz (Alpha)</div>
+        <input type="range" class="spatial-slider" min="1" max="40" value="8" oninput="setBinaural(this.value)">
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p style="font-family: 'JetBrains Mono', monospace; color: var(--gold);">φ = 1.618033988749895</p>
+  <p style="margin-top: 0.5rem;">ADAM EREN VEGA — Æ</p>
+  <p style="margin-top: 0.5rem; font-size: 0.85rem;">INFINITY•LOOP — Active</p>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════════
+// ANLÆTAN AUDIO ENGINE
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const TRACKS = [
+  // ANLÆTAN Soundscapes
+  { id: 1, title: 'And I Keep', artist: 'ANLÆTAN', file: 'audio/anlaetan-andIkeep.mp3', freq: '639 Hz', duration: '4:58' },
+  { id: 2, title: 'Neuro Rebirth', artist: 'ANLÆTAN', file: 'audio/anlaetan-neuro-rebirth.mp3', freq: '963 Hz', duration: '5:21' },
+  // Æ Productions
+  { id: 3, title: 'Horizon Sky', artist: 'Æ', file: 'audio/ae-horizon-sky.mp3', freq: '528 Hz', duration: '3:42' },
+  { id: 4, title: 'The Restart', artist: 'Æ', file: 'audio/ae-restart.mp3', freq: '432 Hz', duration: '4:15' },
+  // VEGA Core
+  { id: 5, title: 'Power Is Your Own', artist: 'VEGA', file: 'audio/power-is-your-own.mp3', freq: '963 Hz', duration: '2:15' },
+  { id: 6, title: 'VEGA Soundscape', artist: 'VEGA', file: 'audio/vega-soundscape.wav', freq: '432 Hz', duration: '6:00' }
+];
+
+let audio = new Audio();
+let currentTrack = 0;
+let isPlaying = false;
+let audioContext = null;
+let analyser = null;
+let pannerNode = null;
+let rotationAngle = 0;
+let rotationSpeed = 1;
+let spatialDepth = 0.8;
+let binauralBeat = 8;
+
+// Visualizer
+const visualizer = document.getElementById('visualizer');
+const barCount = 64;
+let bars = [];
+
+// Initialize visualizer bars
+for (let i = 0; i < barCount; i++) {
+  const bar = document.createElement('div');
+  bar.className = 'bar';
+  bar.style.height = '4px';
+  visualizer.appendChild(bar);
+  bars.push(bar);
+}
+
+// Initialize playlist
+function initPlaylist() {
+  const trackList = document.getElementById('trackList');
+  trackList.innerHTML = TRACKS.map((track, i) => `
+    <div class="track ${i === currentTrack ? 'active' : ''}" onclick="playTrack(${i})">
+      <div class="track-number">${i + 1}</div>
+      <div class="track-info">
+        <div class="track-title">${track.title}</div>
+        <div class="track-artist">${track.artist}</div>
+      </div>
+      <span class="track-freq">${track.freq}</span>
+      <span class="track-duration">${track.duration}</span>
+    </div>
+  `).join('');
+  
+  document.getElementById('trackCount').textContent = `${TRACKS.length} tracks`;
+}
+
+// Audio Context Setup
+function initAudioContext() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Create nodes
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 256;
+    
+    pannerNode = audioContext.createStereoPanner();
+    
+    // Connect
+    const source = audioContext.createMediaElementSource(audio);
+    source.connect(analyser);
+    analyser.connect(pannerNode);
+    pannerNode.connect(audioContext.destination);
+  }
+  
+  if (audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
+}
+
+// Play Track
+function playTrack(index) {
+  currentTrack = index;
+  const track = TRACKS[currentTrack];
+  
+  audio.src = track.file;
+  audio.load();
+  
+  initAudioContext();
+  
+  audio.play().then(() => {
+    isPlaying = true;
+    document.getElementById('playBtn').textContent = '⏸';
+    updateNowPlaying();
+    updatePlaylist();
+    startVisualization();
+    startSpatialRotation();
+  }).catch(err => {
+    console.log('Playback error:', err);
+    // Show fallback message
+    document.getElementById('nowPlayingTitle').textContent = track.title;
+    document.getElementById('nowPlayingArtist').textContent = `${track.artist} — ${track.freq}`;
+  });
+}
+
+function togglePlay() {
+  if (isPlaying) {
+    audio.pause();
+    isPlaying = false;
+    document.getElementById('playBtn').textContent = '▶';
+  } else {
+    if (audio.src) {
+      initAudioContext();
+      audio.play();
+      isPlaying = true;
+      document.getElementById('playBtn').textContent = '⏸';
+      startVisualization();
+    } else {
+      playTrack(0);
+    }
+  }
+}
+
+function previousTrack() {
+  currentTrack = (currentTrack - 1 + TRACKS.length) % TRACKS.length;
+  playTrack(currentTrack);
+}
+
+function nextTrack() {
+  currentTrack = (currentTrack + 1) % TRACKS.length;
+  playTrack(currentTrack);
+}
+
+function setVolume(value) {
+  audio.volume = value / 100;
+}
+
+function seek(event) {
+  const bar = document.getElementById('progressBar');
+  const rect = bar.getBoundingClientRect();
+  const percent = (event.clientX - rect.left) / rect.width;
+  audio.currentTime = percent * audio.duration;
+}
+
+// Update UI
+function updateNowPlaying() {
+  const track = TRACKS[currentTrack];
+  document.getElementById('nowPlayingTitle').textContent = track.title;
+  document.getElementById('nowPlayingArtist').textContent = `${track.artist} — ${track.freq}`;
+}
+
+function updatePlaylist() {
+  document.querySelectorAll('.track').forEach((el, i) => {
+    el.classList.toggle('active', i === currentTrack);
+  });
+}
+
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+// Progress update
+audio.addEventListener('timeupdate', () => {
+  const percent = (audio.currentTime / audio.duration) * 100;
+  document.getElementById('progressFill').style.width = `${percent}%`;
+  document.getElementById('currentTime').textContent = formatTime(audio.currentTime);
+});
+
+audio.addEventListener('loadedmetadata', () => {
+  document.getElementById('totalTime').textContent = formatTime(audio.duration);
+});
+
+audio.addEventListener('ended', nextTrack);
+
+// Visualization
+function startVisualization() {
+  if (!analyser) return;
+  
+  const dataArray = new Uint8Array(analyser.frequencyBinCount);
+  
+  function animate() {
+    if (!isPlaying) return;
+    
+    analyser.getByteFrequencyData(dataArray);
+    
+    const step = Math.floor(dataArray.length / barCount);
+    
+    bars.forEach((bar, i) => {
+      const value = dataArray[i * step] || 0;
+      const height = 4 + (value / 255) * 100;
+      bar.style.height = `${height}px`;
+    });
+    
+    requestAnimationFrame(animate);
+  }
+  
+  animate();
+}
+
+// Simulated visualization for demo
+function simulateVisualization() {
+  setInterval(() => {
+    if (!isPlaying || analyser) return;
+    
+    bars.forEach((bar, i) => {
+      const height = 4 + Math.random() * 60 * Math.sin(Date.now() * 0.001 + i * 0.1);
+      bar.style.height = `${Math.max(4, height)}px`;
+    });
+  }, 50);
+}
+simulateVisualization();
+
+// 8D Spatial Rotation
+function startSpatialRotation() {
+  function rotate() {
+    if (!isPlaying || !pannerNode) return;
+    
+    rotationAngle += 0.02 * rotationSpeed;
+    const panValue = Math.sin(rotationAngle) * spatialDepth;
+    pannerNode.pan.setValueAtTime(panValue, audioContext.currentTime);
+    
+    requestAnimationFrame(rotate);
+  }
+  
+  rotate();
+}
+
+// Spatial Controls
+function setRotation(value) {
+  rotationSpeed = value / 100;
+  document.getElementById('rotationValue').textContent = `${rotationSpeed.toFixed(1)}x`;
+}
+
+function setDepth(value) {
+  spatialDepth = value / 100;
+  document.getElementById('depthValue').textContent = `${value}%`;
+}
+
+function setBinaural(value) {
+  binauralBeat = parseInt(value);
+  let state = 'Delta';
+  if (value >= 4) state = 'Theta';
+  if (value >= 8) state = 'Alpha';
+  if (value >= 12) state = 'Beta';
+  if (value >= 30) state = 'Gamma';
+  document.getElementById('binauralValue').textContent = `${value} Hz (${state})`;
+}
+
+// Initialize
+initPlaylist();
+</script>
+
+</body>
+</html>

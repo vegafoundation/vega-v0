@@ -1,0 +1,159 @@
+:root {
+  --bg: #07090f;
+  --fg: #f6f7fb;
+  --muted: #9ba3b5;
+  --card: #0f1320;
+  --accent: #6cf7ff;
+  --gradient-a: #6cf7ff;
+  --gradient-b: #7f5af0;
+  --gradient-c: #ff6b9f;
+  font-family: "Inter", "SF Pro Display", system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(120% 120% at 10% 20%, rgba(127, 90, 240, 0.18), transparent),
+              radial-gradient(120% 120% at 80% 0%, rgba(108, 247, 255, 0.2), transparent),
+              var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.badge {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.hero {
+  margin: 60px 0 40px;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 6vw, 48px);
+  margin: 0 0 12px;
+  letter-spacing: 0.02em;
+}
+
+.hero p {
+  margin: 0 0 18px;
+  color: var(--muted);
+  max-width: 720px;
+  line-height: 1.6;
+}
+
+.cta-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(120deg, rgba(108, 247, 255, 0.12), rgba(127, 90, 240, 0.16));
+  color: var(--fg);
+  font-weight: 600;
+}
+
+section {
+  margin: 32px 0 20px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.card h3 { margin: 0 0 6px; font-size: 16px; }
+.card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+.pill { display: inline-block; margin-top: 10px; padding: 4px 10px; background: rgba(255,255,255,0.07); border-radius: 999px; color: var(--muted); font-size: 12px; }
+
+.muted { color: var(--muted); }
+
+.activity {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.activity-item {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.footer {
+  margin-top: 60px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+@keyframes flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow::after {
+  content: "";
+  position: absolute;
+  inset: -60% -60%;
+  background: radial-gradient(circle at 20% 20%, rgba(108, 247, 255, 0.16), transparent 40%),
+              radial-gradient(circle at 80% 30%, rgba(127, 90, 240, 0.2), transparent 40%),
+              radial-gradient(circle at 50% 80%, rgba(255, 107, 159, 0.15), transparent 35%);
+  filter: blur(40px);
+  z-index: -1;
+  animation: flow 14s ease-in-out infinite;
+}
