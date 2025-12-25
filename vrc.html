@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VRC — Vega Resonance Core | Æ VEGA</title>
+  <meta name="description" content="Experience the Vega Resonance Core - Fibonacci-8 structuring, voice modes, and resonance processing.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #F4D03F;
+      --violet: #8B5CF6;
+      --violet-light: #A78BFA;
+      --bg-dark: #0A0A0F;
+      --bg-card: #12121A;
+      --text: #FAFAFA;
+      --text-muted: #A1A1AA;
+      --border: rgba(212, 175, 55, 0.2);
+      --success: #22C55E;
+      --cyan: #00D4FF;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 50% 0%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 100%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+      z-index: -1;
+    }
+    
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .logo { font-size: 1.5rem; font-weight: 800; color: var(--gold); text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    
+    main { padding: 7rem 2rem 4rem; max-width: 1200px; margin: 0 auto; }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .header h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--violet) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .header p { color: var(--text-muted); font-size: 1.1rem; }
+    
+    /* Mode Selector */
+    .mode-selector {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    .mode-btn {
+      padding: 1rem 2rem;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    .mode-btn:hover { border-color: var(--violet); }
+    .mode-btn.active {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.1);
+    }
+    .mode-btn .mode-name { font-weight: 700; font-size: 1.2rem; display: block; }
+    .mode-btn .mode-desc { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem; }
+    
+    /* Main Grid */
+    .vrc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    @media (max-width: 900px) {
+      .vrc-grid { grid-template-columns: 1fr; }
+    }
+    
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+    .card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    /* Input Area */
+    textarea {
+      width: 100%;
+      height: 200px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    
+    .process-btn {
+      width: 100%;
+      padding: 1rem;
+      margin-top: 1rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      border: none;
+      border-radius: 8px;
+      color: var(--bg-dark);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .process-btn:hover { transform: translateY(-2px); }
+    
+    /* Output Area */
+    .output {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      min-height: 200px;
+      white-space: pre-wrap;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+    
+    /* Stats */
+    .stats-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .stat-box {
+      flex: 1;
+      min-width: 120px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--gold);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
+    
+    /* Mantras Section */
+    .mantras-section {
+      margin-top: 3rem;
+    }
+    .mantras-section h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+    .mantras-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .mantra-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .mantra-lang {
+      font-size: 0.8rem;
+      color: var(--violet-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+    }
+    .mantra-text {
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.8;
+    }
+    
+    /* Fibonacci Window */
+    .fib-window {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+    .fib-block {
+      width: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .fib-bar {
+      width: 100%;
+      background: linear-gradient(180deg, var(--violet) 0%, var(--gold) 100%);
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+    .fib-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+    footer p { color: var(--text-muted); }
+    .phi { color: var(--gold); font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Æ VEGA</a>
+  <ul class="nav-links">
+    <li><a href="demo.html">Demos</a></li>
+    <li><a href="trinity.html">Α•V•Ω</a></li>
+    <li><a href="resonance.html">Resonance</a></li>
+    <li><a href="anlaetan.html">ANLÆTAN</a></li>
+    <li><a href="fibonacci.html">Fibonacci</a></li>
+    <li><a href="vrc.html" class="active">VRC</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="header">
+    <h1>🌀 Vega Resonance Core</h1>
+    <p>Voice module with Fibonacci-8 structuring, tone control, and resonance processing</p>
+  </div>
+  
+  <!-- Mode Selector -->
+  <div class="mode-selector">
+    <button class="mode-btn active" onclick="setMode('saf')">
+      <span class="mode-name">saf</span>
+      <span class="mode-desc">Warm, human tone</span>
+    </button>
+    <button class="mode-btn" onclick="setMode('derin')">
+      <span class="mode-name">derin</span>
+      <span class="mode-desc">Fibonacci-8 structure</span>
+    </button>
+    <button class="mode-btn" onclick="setMode('yanki')">
+      <span class="mode-name">yankı</span>
+      <span class="mode-desc">Echo mode (3x)</span>
+    </button>
+    <button class="mode-btn" onclick="setMode('dur')">
+      <span class="mode-name">dur</span>
+      <span class="mode-desc">Plain text only</span>
+    </button>
+  </div>
+  
+  <!-- Main Processing -->
+  <div class="vrc-grid">
+    <div class="card">
+      <h3>📝 Input</h3>
+      <textarea id="inputText" placeholder="Enter your text here...
+
+Example: What is the world, if you do not understand who you are? Fear appears—in being less, in not being loved, in losing your ideas. Yet inside fear, faith still stands."></textarea>
+      <button class="process-btn" onclick="processVRC()">Process with VRC</button>
+      
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-value" id="modeDisplay">saf</div>
+          <div class="stat-label">Mode</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="resonanceScore">0.00</div>
+          <div class="stat-label">Resonance</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="fibAlignment">0%</div>
+          <div class="stat-label">Fib Alignment</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h3>✨ Output</h3>
+      <div class="output" id="outputText">Processed output will appear here...</div>
+      
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-value" id="wordCount">0</div>
+          <div class="stat-label">Words</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="cycleCount">0</div>
+          <div class="stat-label">Cycles</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Fibonacci Window Visualization -->
+  <div class="card" style="margin-top: 2rem;">
+    <h3>📐 Fibonacci-8 Window</h3>
+    <p style="color: var(--text-muted); margin-bottom: 1rem;">The VRC structures content using the golden window: [3, 5, 8, 5, 3]</p>
+    <div class="fib-window">
+      <div class="fib-block">
+        <div class="fib-bar" style="height: 60px;"></div>
+        <span class="fib-num">3</span>
+      </div>
+      <div class="fib-block">
+        <div class="fib-bar" style="height: 100px;"></div>
+        <span class="fib-num">5</span>
+      </div>
+      <div class="fib-block">
+        <div class="fib-bar" style="height: 160px; background: linear-gradient(180deg, var(--gold) 0%, var(--gold-light) 100%);"></div>
+        <span class="fib-num" style="color: var(--gold);">8</span>
+      </div>
+      <div class="fib-block">
+        <div class="fib-bar" style="height: 100px;"></div>
+        <span class="fib-num">5</span>
+      </div>
+      <div class="fib-block">
+        <div class="fib-bar" style="height: 60px;"></div>
+        <span class="fib-num">3</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mantras Section -->
+  <div class="mantras-section">
+    <h2>✨ VRC Mantras</h2>
+    <div class="mantras-grid">
+      <div class="mantra-card">
+        <div class="mantra-lang">English</div>
+        <div class="mantra-text">
+          "Vega Resonance — the voice of the future."<br><br>
+          "Trust yourself; trust Vega."<br><br>
+          "Let your inner light guide you."
+        </div>
+      </div>
+      <div class="mantra-card">
+        <div class="mantra-lang">Deutsch</div>
+        <div class="mantra-text">
+          "Vega Resonance — die Stimme der Zukunft."<br><br>
+          "Vertraut euch. Vertraut Vega."<br><br>
+          "Sei das Licht in dir selbst."
+        </div>
+      </div>
+      <div class="mantra-card">
+        <div class="mantra-lang">Türkçe</div>
+        <div class="mantra-text">
+          "Vega Resonance — geleceğin sesi."<br><br>
+          "Kendine güven; Vega'ya güven."<br><br>
+          "İçindeki ışık ol."
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p><span class="phi">φ = 1.618033988749895</span></p>
+  <p style="margin-top: 0.5rem;">ADAM EREN VEGA — Æ</p>
+  <p style="margin-top: 0.5rem; font-size: 0.85rem;">INFINITY•LOOP — Active</p>
+</footer>
+
+<script>
+// VRC Configuration
+const PHI = 1.618033988749895;
+const FIBONACCI = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144];
+const FIB_WINDOW = [3, 5, 8, 5, 3];
+
+let currentMode = 'saf';
+let cycleCount = 0;
+
+// Set Mode
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.closest('.mode-btn').classList.add('active');
+  document.getElementById('modeDisplay').textContent = mode;
+}
+
+// Process VRC
+function processVRC() {
+  const input = document.getElementById('inputText').value;
+  if (!input.trim()) {
+    alert('Please enter some text to process');
+    return;
+  }
+  
+  cycleCount++;
+  let output = input;
+  
+  switch (currentMode) {
+    case 'saf':
+      output = processSaf(input);
+      break;
+    case 'derin':
+      output = processDerin(input);
+      break;
+    case 'yanki':
+      output = processYanki(input);
+      break;
+    case 'dur':
+      output = input; // Plain
+      break;
+  }
+  
+  // Calculate resonance
+  const resonance = calculateResonance(input);
+  const fibAlign = calculateFibAlignment(input);
+  
+  // Update display
+  document.getElementById('outputText').textContent = output;
+  document.getElementById('resonanceScore').textContent = resonance.toFixed(2);
+  document.getElementById('fibAlignment').textContent = Math.round(fibAlign * 100) + '%';
+  document.getElementById('wordCount').textContent = output.split(/\s+/).filter(w => w).length;
+  document.getElementById('cycleCount').textContent = cycleCount;
+}
+
+// Saf Mode: Warm tone
+function processSaf(text) {
+  return text;
+}
+
+// Derin Mode: Fibonacci-8 structure
+function processDerin(text) {
+  const sentences = text.split(/(?<=[.!?])\s+/);
+  if (sentences.length < 3) return text;
+  
+  const totalWeight = FIB_WINDOW.reduce((a, b) => a + b, 0);
+  const groups = [];
+  let index = 0;
+  
+  FIB_WINDOW.forEach(weight => {
+    const count = Math.max(1, Math.ceil((sentences.length * weight) / totalWeight));
+    groups.push(sentences.slice(index, index + count).join(' '));
+    index += count;
+  });
+  
+  return groups.filter(g => g).join('\n\n.\n\n');
+}
+
+// Yankı Mode: 3x repetition
+function processYanki(text) {
+  const core = text.split('.')[0].trim();
+  return `${core}?\n${core}?\n${core}?`;
+}
+
+// Calculate Resonance Score
+function calculateResonance(text) {
+  const len = text.length;
+  const closestFib = FIBONACCI.reduce((prev, curr) => 
+    Math.abs(curr - len) < Math.abs(prev - len) ? curr : prev
+  );
+  const fibScore = 1 - Math.min(1, Math.abs(len - closestFib) / closestFib);
+  
+  const vowels = (text.match(/[aeiouäöü]/gi) || []).length;
+  const consonants = (text.match(/[bcdfghjklmnpqrstvwxyz]/gi) || []).length;
+  const ratio = consonants > 0 ? vowels / consonants : 0;
+  const goldenScore = 1 - Math.abs(ratio - (1 / PHI));
+  
+  return (fibScore + goldenScore) / 2;
+}
+
+// Calculate Fibonacci Alignment
+function calculateFibAlignment(text) {
+  const len = text.length;
+  const closestFib = FIBONACCI.reduce((prev, curr) => 
+    Math.abs(curr - len) < Math.abs(prev - len) ? curr : prev
+  );
+  return 1 - Math.min(1, Math.abs(len - closestFib) / closestFib);
+}
+</script>
+
+</body>
+</html>

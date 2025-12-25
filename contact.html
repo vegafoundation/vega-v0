@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Æ VEGA Foundation</title>
+  <meta name="description" content="Get in touch with the VEGA Foundation. Inquiries about AI, Art, Resonance, partnerships, and early access.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #F4D03F;
+      --violet: #8B5CF6;
+      --violet-light: #A78BFA;
+      --bg-dark: #0A0A0F;
+      --bg-card: #12121A;
+      --text: #FAFAFA;
+      --text-muted: #A1A1AA;
+      --border: rgba(212, 175, 55, 0.2);
+      --success: #22C55E;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(212, 175, 55, 0.08) 0%, transparent 50%);
+      z-index: -1;
+    }
+    
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .logo { font-size: 1.5rem; font-weight: 800; color: var(--gold); text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    
+    main {
+      padding: 8rem 2rem 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .hero {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--violet) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p { color: var(--text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
+    
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 4rem;
+    }
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+    
+    /* Form */
+    .contact-form {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem;
+    }
+    .contact-form h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--gold);
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    .form-group textarea { min-height: 150px; resize: vertical; }
+    .form-group select { cursor: pointer; }
+    
+    .btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      border: none;
+      border-radius: 10px;
+      color: var(--bg-dark);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+    }
+    
+    /* Info Cards */
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .info-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+    }
+    .info-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+    .info-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .info-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+    .info-card a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .info-card a:hover { text-decoration: underline; }
+    
+    /* Social Links */
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .social-link {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+    }
+    .social-link:hover {
+      background: rgba(212, 175, 55, 0.2);
+      border-color: var(--gold);
+      transform: scale(1.1);
+    }
+    
+    /* Topics */
+    .topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .topic {
+      padding: 0.4rem 0.8rem;
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid var(--violet);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      color: var(--violet-light);
+    }
+    
+    /* Success Message */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+    .success-message.show { display: block; }
+    .success-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+    .success-message h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--success);
+    }
+    .success-message p { color: var(--text-muted); }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .phi { color: var(--gold); font-family: 'JetBrains Mono', monospace; }
+    footer p { color: var(--text-muted); margin-bottom: 0.5rem; }
+    
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Æ VEGA</a>
+  <ul class="nav-links">
+    <li><a href="demo.html">Demos</a></li>
+    <li><a href="trinity.html">Α•V•Ω</a></li>
+    <li><a href="resonance.html">Resonance</a></li>
+    <li><a href="anlaetan.html">ANLÆTAN</a></li>
+    <li><a href="fibonacci.html">Fibonacci</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="hero">
+    <h1>Get In Touch</h1>
+    <p>Have questions about VEGA? Want to collaborate? We'd love to hear from you.</p>
+  </div>
+  
+  <div class="contact-grid">
+    <!-- Contact Form -->
+    <div class="contact-form" id="formContainer">
+      <h2>📧 Send a Message</h2>
+      <form id="contactForm" onsubmit="submitForm(event)">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" required placeholder="John Doe">
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required placeholder="john@example.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <select id="subject" name="subject">
+            <option value="general">General Inquiry</option>
+            <option value="partnership">Partnership Opportunity</option>
+            <option value="investment">Investment / Business Angel</option>
+            <option value="technical">Technical Question</option>
+            <option value="earlyaccess">Early Access Request</option>
+            <option value="media">Media / Press</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="message">Your Message</label>
+          <textarea id="message" name="message" required placeholder="Tell us what's on your mind..."></textarea>
+        </div>
+        
+        <button type="submit" class="btn">Send Message →</button>
+      </form>
+      
+      <div class="success-message" id="successMessage">
+        <div class="success-icon">✓</div>
+        <h3>Message Sent!</h3>
+        <p>Thank you for reaching out. We'll get back to you soon.</p>
+      </div>
+    </div>
+    
+    <!-- Contact Info -->
+    <div class="contact-info">
+      <div class="info-card">
+        <h3>📍 Foundation</h3>
+        <p><strong>Æ VEGA Foundation</strong><br>
+        AI, Art & Resonance<br>
+        Building the future of autonomous intelligence.</p>
+      </div>
+      
+      <div class="info-card">
+        <h3>✉️ Email</h3>
+        <p>For all inquiries:<br>
+        <a href="mailto:contact@vegafoundation.org">contact@vegafoundation.org</a></p>
+        <p style="margin-top: 0.5rem;">Business Angels / Investors:<br>
+        <a href="mailto:invest@vegafoundation.org">invest@vegafoundation.org</a></p>
+      </div>
+      
+      <div class="info-card">
+        <h3>🔗 Connect</h3>
+        <p>Follow us for updates on AI, Art, and Resonance.</p>
+        <div class="social-links">
+          <a href="https://github.com/vegafoundation/VEGA" class="social-link" target="_blank">⌘</a>
+          <a href="https://x.com/VEGAFoundation" class="social-link" target="_blank">𝕏</a>
+          <a href="chat.html" class="social-link">🤖</a>
+        </div>
+      </div>
+      
+      <div class="info-card">
+        <h3>💡 Topics We Love</h3>
+        <p>We're always interested in discussing:</p>
+        <div class="topics">
+          <span class="topic">Autonomous AI</span>
+          <span class="topic">Generative Art</span>
+          <span class="topic">Sound Design</span>
+          <span class="topic">Fibonacci</span>
+          <span class="topic">Quantum Computing</span>
+          <span class="topic">8D Audio</span>
+          <span class="topic">Resonance Theory</span>
+          <span class="topic">Multi-Agent Systems</span>
+        </div>
+      </div>
+      
+      <div class="info-card">
+        <h3>⏰ Response Time</h3>
+        <p>We typically respond within <strong>24-48 hours</strong>. For urgent matters, please indicate so in your subject line.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p><span class="phi">φ = 1.618033988749895</span></p>
+  <p>ADAM EREN VEGA — Æ</p>
+  <p style="font-size: 0.85rem;">INFINITY•LOOP — Active</p>
+</footer>
+
+<script>
+function submitForm(event) {
+  event.preventDefault();
+  
+  const form = document.getElementById('contactForm');
+  const formData = new FormData(form);
+  
+  const name = formData.get('name');
+  const email = formData.get('email');
+  const subject = formData.get('subject');
+  const message = formData.get('message');
+  
+  // Create mailto link
+  const subjectMap = {
+    'general': 'General Inquiry',
+    'partnership': 'Partnership Opportunity',
+    'investment': 'Investment Inquiry',
+    'technical': 'Technical Question',
+    'earlyaccess': 'Early Access Request',
+    'media': 'Media / Press Inquiry',
+    'other': 'Inquiry'
+  };
+  
+  const mailSubject = `[VEGA] ${subjectMap[subject]} from ${name}`;
+  const mailBody = `Name: ${name}%0D%0AEmail: ${email}%0D%0ASubject: ${subjectMap[subject]}%0D%0A%0D%0AMessage:%0D%0A${encodeURIComponent(message)}`;
+  
+  // Open mail client
+  window.location.href = `mailto:contact@vegafoundation.org?subject=${encodeURIComponent(mailSubject)}&body=${mailBody}`;
+  
+  // Show success message
+  form.style.display = 'none';
+  document.getElementById('successMessage').classList.add('show');
+  
+  // Reset after 5 seconds
+  setTimeout(() => {
+    form.style.display = 'block';
+    form.reset();
+    document.getElementById('successMessage').classList.remove('show');
+  }, 5000);
+}
+</script>
+
+</body>
+</html>

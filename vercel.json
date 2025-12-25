@@ -1,0 +1,67 @@
+{
+  "version": 2,
+  "name": "vega-v0",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".",
+  "framework": null,
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-VEGA-Resonance",
+          "value": "Active"
+        },
+        {
+          "key": "X-Fibonacci-Level",
+          "value": "8"
+        },
+        {
+          "key": "X-Trinity-Architecture",
+          "value": "Alpha-Vega-Omega"
+        },
+        {
+          "key": "X-ANLAETAN-Frequency",
+          "value": "432-528-963"
+        },
+        {
+          "key": "X-AE-Signature",
+          "value": "ADAM EREN VEGA"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/$1"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/dashboard.html",
+      "permanent": false
+    }
+  ],
+  "regions": ["fra1", "cdg1", "lhr1"],
+  "env": {
+    "VEGA_RESONANCE": "true",
+    "FIBONACCI_LEVEL": "8",
+    "TRINITY_ACTIVE": "Alpha-Vega-Omega"
+  }
+}

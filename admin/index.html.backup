@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Æ VEGA — GOD Admin Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a href="../index.html" class="logo-link">
+      <div class="logo">Æ VEGA</div>
+      <span class="badge">ADMIN</span>
+    </a>
+    
+    <nav>
+      <div class="nav-section">
+        <div class="nav-title">CORE</div>
+        <a class="nav-item active" data-panel="chat">
+          <span class="icon">💬</span> VEGA Chat
+          <span class="status-badge live">Live</span>
+        </a>
+        <a class="nav-item" data-panel="connectors">
+          <span class="icon">⚙️</span> API Connectors
+        </a>
+        <a class="nav-item" data-panel="apps">
+          <span class="icon">📱</span> Apps & Auth
+        </a>
+      </div>
+      
+      <div class="nav-section">
+        <div class="nav-title">CREATE</div>
+        <a class="nav-item" data-panel="module-gen">
+          <span class="icon">🧩</span> Module Generator
+        </a>
+        <a class="nav-item" data-panel="app-builder">
+          <span class="icon">🏗️</span> App Builder
+        </a>
+        <a class="nav-item" data-panel="website-deployer">
+          <span class="icon">🌐</span> Website Deployer
+        </a>
+        <a class="nav-item" data-panel="image-gen">
+          <span class="icon">🎨</span> Image Generation
+        </a>
+        <a class="nav-item" data-panel="whitepaper-gen">
+          <span class="icon">📄</span> Whitepaper Gen
+        </a>
+      </div>
+      
+      <div class="nav-section">
+        <div class="nav-title">ANLÆTAN</div>
+        <a class="nav-item" data-panel="soundscape">
+          <span class="icon">🎵</span> Soundscape Studio
+        </a>
+        <a class="nav-item" data-panel="samples">
+          <span class="icon">🎧</span> Sample Library
+        </a>
+      </div>
+      
+      <div class="nav-section">
+        <div class="nav-title">SYSTEM</div>
+        <a class="nav-item" data-panel="agents">
+          <span class="icon">🤖</span> Agent Manager
+        </a>
+        <a class="nav-item" data-panel="cursor-api">
+          <span class="icon">⚡</span> Cursor API
+        </a>
+        <a class="nav-item" data-panel="monitoring">
+          <span class="icon">📊</span> Monitoring
+        </a>
+        <a class="nav-item" data-panel="docs">
+          <span class="icon">📚</span> Documentation
+        </a>
+      </div>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <div class="status-indicator">
+        <span class="dot pulse"></span>
+        <span>INFINITY•LOOP — Active</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="top-bar">
+      <h1 id="panel-title">VEGA Chat</h1>
+      <div class="top-bar-actions">
+        <button class="btn-icon" onclick="toggleTheme()">🌙</button>
+        <a href="../index.html" class="btn btn-outline">🏠 Home</a>
+      </div>
+    </header>
+
+    <!-- VEGA Chat Panel -->
+    <div class="panel active" id="panel-chat">
+      <div class="chat-layout">
+        <div class="chat-main">
+          <div class="chat-messages" id="chat-messages">
+            <div class="message assistant">
+              <div class="avatar">Æ</div>
+              <div class="content">
+                <strong>Willkommen bei VEGA.</strong><br>
+                Ich bin dein orchestrierter AI-Assistent. Ich verbinde multiple Engines — GPT-4, Claude, Grok, Gemini — zu einer kohärenten Resonanz.<br><br>
+                Was möchtest du erschaffen?
+              </div>
+            </div>
+          </div>
+          <div class="chat-input-area">
+            <textarea id="chat-input" placeholder="Schreibe eine Nachricht an VEGA..." rows="1"></textarea>
+            <button class="btn btn-primary" onclick="sendMessage()">
+              <span>➤</span>
+            </button>
+          </div>
+        </div>
+        <div class="chat-sidebar">
+          <h3>MODEL ORCHESTRA</h3>
+          <div class="model-list">
+            <div class="model-item active" data-model="vega">
+              <span class="model-icon vega">Æ</span>
+              <div class="model-info">
+                <div class="model-name">VEGA Orchestrator</div>
+                <div class="model-desc">Multi-model synthesis</div>
+              </div>
+            </div>
+            <div class="model-item" data-model="gpt4">
+              <span class="model-icon gpt">G</span>
+              <div class="model-info">
+                <div class="model-name">GPT-4 Turbo</div>
+                <div class="model-desc">OpenAI flagship</div>
+              </div>
+            </div>
+            <div class="model-item" data-model="claude">
+              <span class="model-icon claude">C</span>
+              <div class="model-info">
+                <div class="model-name">Claude 3.5</div>
+                <div class="model-desc">Anthropic Sonnet</div>
+              </div>
+            </div>
+            <div class="model-item" data-model="grok">
+              <span class="model-icon grok">X</span>
+              <div class="model-info">
+                <div class="model-name">Grok 2</div>
+                <div class="model-desc">xAI real-time</div>
+              </div>
+            </div>
+            <div class="model-item" data-model="gemini">
+              <span class="model-icon gemini">G</span>
+              <div class="model-info">
+                <div class="model-name">Gemini Pro</div>
+                <div class="model-desc">Google DeepMind</div>
+              </div>
+            </div>
+          </div>
+          <h3>PARAMETERS</h3>
+          <div class="param-group">
+            <label>Temperature <span id="temp-val">0.7</span></label>
+            <input type="range" min="0" max="2" step="0.1" value="0.7" id="temperature" oninput="document.getElementById('temp-val').textContent=this.value">
+          </div>
+          <div class="param-group">
+            <label>Max Tokens <span id="tokens-val">2048</span></label>
+            <input type="range" min="256" max="8192" step="256" value="2048" id="max-tokens" oninput="document.getElementById('tokens-val').textContent=this.value">
+          </div>
+          <div class="param-group">
+            <label>Resonance <span class="status-active">Active</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Module Generator Panel -->
+    <div class="panel" id="panel-module-gen">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>🧩 Module Generator</h2>
+          <p>Erstelle neue VEGA-Module mit KI-Unterstützung</p>
+        </div>
+        
+        <div class="generator-layout">
+          <div class="generator-form">
+            <div class="form-group">
+              <label>Module Name</label>
+              <input type="text" id="module-name" placeholder="z.B. VegaAnalytics">
+            </div>
+            <div class="form-group">
+              <label>Beschreibung</label>
+              <textarea id="module-desc" rows="3" placeholder="Was soll das Modul tun?"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Module Typ</label>
+              <select id="module-type">
+                <option value="agent">Agent Module</option>
+                <option value="api">API Module</option>
+                <option value="ui">UI Component</option>
+                <option value="integration">Integration</option>
+                <option value="protocol">Protocol</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Features</label>
+              <div class="checkbox-grid">
+                <label><input type="checkbox" checked> AMP Compliance</label>
+                <label><input type="checkbox" checked> Auto-Documentation</label>
+                <label><input type="checkbox"> WebSocket Support</label>
+                <label><input type="checkbox"> REST API</label>
+                <label><input type="checkbox"> Database Connection</label>
+                <label><input type="checkbox"> Caching Layer</label>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-lg" onclick="generateModule()">
+              ✨ Modul generieren
+            </button>
+          </div>
+          
+          <div class="generator-preview">
+            <div class="preview-header">
+              <span>Generated Code</span>
+              <div class="preview-actions">
+                <button class="btn btn-sm" onclick="copyCode()">📋 Copy</button>
+                <button class="btn btn-sm btn-primary" onclick="deployModule()">🚀 Deploy</button>
+              </div>
+            </div>
+            <pre id="module-code"><code>// Modul-Code wird hier generiert...</code></pre>
+          </div>
+        </div>
+        
+        <div class="templates-section">
+          <h3>📦 Module Templates</h3>
+          <div class="template-grid">
+            <div class="template-card" onclick="loadTemplate('agent')">
+              <div class="template-icon">🤖</div>
+              <h4>Agent Template</h4>
+              <p>Autonomer Agent mit AMP</p>
+            </div>
+            <div class="template-card" onclick="loadTemplate('api')">
+              <div class="template-icon">🔌</div>
+              <h4>API Service</h4>
+              <p>REST/GraphQL Endpoints</p>
+            </div>
+            <div class="template-card" onclick="loadTemplate('ui')">
+              <div class="template-icon">🎨</div>
+              <h4>UI Component</h4>
+              <p>React/Vue Component</p>
+            </div>
+            <div class="template-card" onclick="loadTemplate('resonance')">
+              <div class="template-icon">🌀</div>
+              <h4>Resonance Module</h4>
+              <p>VRC Integration</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- App Builder Panel -->
+    <div class="panel" id="panel-app-builder">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>🏗️ App Builder</h2>
+          <p>Baue komplette Anwendungen mit dem VEGA Stack</p>
+        </div>
+        
+        <div class="app-builder-layout">
+          <div class="app-config">
+            <div class="form-group">
+              <label>App Name</label>
+              <input type="text" id="app-name" placeholder="MeineApp">
+            </div>
+            <div class="form-group">
+              <label>App Typ</label>
+              <select id="app-type">
+                <option value="web">Web App (React)</option>
+                <option value="mobile">Mobile App (React Native)</option>
+                <option value="api">API Backend (Node.js)</option>
+                <option value="fullstack">Full-Stack (Next.js)</option>
+                <option value="static">Static Site</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Features</label>
+              <div class="feature-chips">
+                <span class="chip active" data-feature="auth">🔐 Auth</span>
+                <span class="chip" data-feature="db">💾 Database</span>
+                <span class="chip" data-feature="ai">🤖 AI Integration</span>
+                <span class="chip" data-feature="payments">💳 Payments</span>
+                <span class="chip active" data-feature="vega">Æ VEGA SDK</span>
+                <span class="chip" data-feature="anlaetan">🎵 ANLÆTAN</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Beschreibung</label>
+              <textarea id="app-desc" rows="4" placeholder="Beschreibe deine App..."></textarea>
+            </div>
+            
+            <div class="build-actions">
+              <button class="btn btn-primary btn-lg" onclick="buildApp()">
+                🚀 App generieren
+              </button>
+              <button class="btn btn-outline" onclick="previewApp()">
+                👁️ Preview
+              </button>
+            </div>
+          </div>
+          
+          <div class="app-preview">
+            <div class="preview-tabs">
+              <button class="tab active" data-tab="structure">📁 Struktur</button>
+              <button class="tab" data-tab="code">💻 Code</button>
+              <button class="tab" data-tab="preview">🖼️ Preview</button>
+            </div>
+            <div class="preview-content">
+              <div class="file-tree" id="app-structure">
+                <div class="tree-item folder open">
+                  <span>📁 my-vega-app/</span>
+                  <div class="tree-children">
+                    <div class="tree-item file">📄 package.json</div>
+                    <div class="tree-item folder">
+                      <span>📁 src/</span>
+                      <div class="tree-children">
+                        <div class="tree-item file">📄 App.jsx</div>
+                        <div class="tree-item file">📄 index.js</div>
+                        <div class="tree-item folder">
+                          <span>📁 components/</span>
+                        </div>
+                        <div class="tree-item folder">
+                          <span>📁 vega/</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tree-item file">📄 vega.config.js</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Website Deployer Panel -->
+    <div class="panel" id="panel-website-deployer">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>🌐 Website Deployer</h2>
+          <p>Erstelle und deploye Websites für Kunden in Minuten</p>
+        </div>
+        
+        <div class="deployer-layout">
+          <div class="deploy-form">
+            <div class="form-group">
+              <label>Projekt Name</label>
+              <input type="text" id="site-name" placeholder="kunde-website">
+            </div>
+            <div class="form-group">
+              <label>Domain</label>
+              <div class="input-group">
+                <input type="text" id="site-domain" placeholder="kunde">
+                <span class="input-suffix">.vega.foundation</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Template</label>
+              <div class="template-selector">
+                <div class="template-option active" data-template="business">
+                  <div class="template-preview business"></div>
+                  <span>Business</span>
+                </div>
+                <div class="template-option" data-template="portfolio">
+                  <div class="template-preview portfolio"></div>
+                  <span>Portfolio</span>
+                </div>
+                <div class="template-option" data-template="shop">
+                  <div class="template-preview shop"></div>
+                  <span>E-Commerce</span>
+                </div>
+                <div class="template-option" data-template="landing">
+                  <div class="template-preview landing"></div>
+                  <span>Landing Page</span>
+                </div>
+                <div class="template-option" data-template="saas">
+                  <div class="template-preview saas"></div>
+                  <span>SaaS</span>
+                </div>
+                <div class="template-option" data-template="custom">
+                  <div class="template-preview custom"></div>
+                  <span>Custom AI</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Beschreibung für KI</label>
+              <textarea id="site-prompt" rows="4" placeholder="Beschreibe die gewünschte Website für den Kunden..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Branding</label>
+              <div class="color-inputs">
+                <div class="color-input">
+                  <label>Primary</label>
+                  <input type="color" id="color-primary" value="#D4AF37">
+                </div>
+                <div class="color-input">
+                  <label>Secondary</label>
+                  <input type="color" id="color-secondary" value="#8B5CF6">
+                </div>
+                <div class="color-input">
+                  <label>Background</label>
+                  <input type="color" id="color-bg" value="#0D0D0D">
+                </div>
+              </div>
+            </div>
+            
+            <div class="deploy-actions">
+              <button class="btn btn-primary btn-lg" onclick="generateSite()">
+                ✨ Website generieren
+              </button>
+              <button class="btn btn-success btn-lg" onclick="deploySite()">
+                🚀 Deploy to Production
+              </button>
+            </div>
+          </div>
+          
+          <div class="deploy-preview">
+            <div class="preview-frame">
+              <div class="frame-header">
+                <div class="frame-dots">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="frame-url">https://<span id="preview-domain">kunde</span>.vega.foundation</div>
+              </div>
+              <iframe id="site-preview-frame" src="about:blank"></iframe>
+            </div>
+          </div>
+        </div>
+        
+        <div class="deployed-sites">
+          <h3>🌐 Deployed Sites</h3>
+          <div class="sites-grid">
+            <div class="site-card">
+              <div class="site-preview"></div>
+              <div class="site-info">
+                <h4>vega.foundation</h4>
+                <span class="status online">● Online</span>
+              </div>
+              <div class="site-actions">
+                <button class="btn btn-sm">Edit</button>
+                <button class="btn btn-sm">Analytics</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cursor API Panel -->
+    <div class="panel" id="panel-cursor-api">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>⚡ Cursor API Integration</h2>
+          <p>Verbinde mit Cursor IDE für Live-Entwicklung</p>
+        </div>
+        
+        <div class="cursor-layout">
+          <div class="cursor-config">
+            <div class="config-card">
+              <h3>🔗 Connection Status</h3>
+              <div class="connection-status connected">
+                <span class="status-dot"></span>
+                <span>Connected to Cursor IDE</span>
+              </div>
+              <div class="connection-details">
+                <div class="detail-row">
+                  <span>Workspace:</span>
+                  <code>/Users/vega/VEGA</code>
+                </div>
+                <div class="detail-row">
+                  <span>Active Files:</span>
+                  <code id="active-files">3</code>
+                </div>
+                <div class="detail-row">
+                  <span>Last Sync:</span>
+                  <code id="last-sync">Just now</code>
+                </div>
+              </div>
+            </div>
+            
+            <div class="config-card">
+              <h3>🛠️ Actions</h3>
+              <div class="action-buttons">
+                <button class="btn btn-block" onclick="cursorAction('create-file')">
+                  📄 Neue Datei erstellen
+                </button>
+                <button class="btn btn-block" onclick="cursorAction('edit-file')">
+                  ✏️ Datei bearbeiten
+                </button>
+                <button class="btn btn-block" onclick="cursorAction('run-command')">
+                  ⚡ Command ausführen
+                </button>
+                <button class="btn btn-block" onclick="cursorAction('search')">
+                  🔍 Codebase durchsuchen
+                </button>
+                <button class="btn btn-block" onclick="cursorAction('generate')">
+                  ✨ Code generieren
+                </button>
+                <button class="btn btn-block" onclick="cursorAction('refactor')">
+                  🔄 Refactoring
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="cursor-terminal">
+            <div class="terminal-header">
+              <span>VEGA Terminal</span>
+              <div class="terminal-actions">
+                <button onclick="clearTerminal()">Clear</button>
+              </div>
+            </div>
+            <div class="terminal-output" id="cursor-terminal">
+              <div class="terminal-line">
+                <span class="prompt">vega@admin $</span>
+                <span>Cursor API initialized...</span>
+              </div>
+              <div class="terminal-line success">
+                <span class="prompt">✓</span>
+                <span>Connected to workspace: /Users/vega/VEGA</span>
+              </div>
+              <div class="terminal-line">
+                <span class="prompt">vega@admin $</span>
+                <span class="cursor">_</span>
+              </div>
+            </div>
+            <div class="terminal-input">
+              <span class="prompt">$</span>
+              <input type="text" id="terminal-cmd" placeholder="Enter command..." onkeypress="if(event.key==='Enter')executeTerminal()">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sample Library Panel -->
+    <div class="panel" id="panel-samples">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>🎧 ANLÆTAN Sample Library</h2>
+          <p>44 Original Samples aus den VEGA Archives</p>
+        </div>
+        
+        <div class="samples-layout">
+          <div class="samples-controls">
+            <input type="text" placeholder="🔍 Samples durchsuchen..." class="search-input" oninput="filterSamples(this.value)">
+            <div class="filter-chips">
+              <span class="chip active" data-filter="all">Alle</span>
+              <span class="chip" data-filter="anlaetan">ANLÆTAN</span>
+              <span class="chip" data-filter="ae">Æ</span>
+              <span class="chip" data-filter="aeraen">ÆRÆN</span>
+              <span class="chip" data-filter="vega">VEGA</span>
+            </div>
+          </div>
+          
+          <div class="samples-grid" id="samples-grid">
+            <!-- Samples werden dynamisch geladen -->
+          </div>
+          
+          <div class="now-playing">
+            <div class="now-playing-art"></div>
+            <div class="now-playing-info">
+              <div class="track-name">Keine Wiedergabe</div>
+              <div class="track-artist">ANLÆTAN</div>
+            </div>
+            <div class="now-playing-controls">
+              <button onclick="prevTrack()">⏮</button>
+              <button onclick="togglePlay()" class="play-btn">▶</button>
+              <button onclick="nextTrack()">⏭</button>
+            </div>
+            <div class="progress-bar">
+              <div class="progress" style="width: 0%"></div>
+            </div>
+            <div class="volume-control">
+              <span>🔊</span>
+              <input type="range" min="0" max="100" value="70" oninput="setVolume(this.value)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Connectors Panel -->
+    <div class="panel" id="panel-connectors">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>⚙️ API Connectors</h2>
+          <p>Verbinde alle KI-Engines für die Orchestrierung</p>
+        </div>
+        
+        <div class="connectors-grid">
+          <div class="connector-card">
+            <div class="connector-header">
+              <span class="connector-icon openai">◉</span>
+              <div class="connector-info">
+                <h4>OpenAI</h4>
+                <span class="status connected">● Connected</span>
+              </div>
+            </div>
+            <div class="connector-body">
+              <div class="form-group">
+                <label>API Key</label>
+                <input type="password" placeholder="sk-..." id="openai-key">
+              </div>
+              <div class="connector-models">
+                <span class="model-tag">GPT-4 Turbo</span>
+                <span class="model-tag">GPT-4o</span>
+                <span class="model-tag">DALL-E 3</span>
+              </div>
+            </div>
+            <div class="connector-footer">
+              <button class="btn btn-sm" onclick="testConnector('openai')">Test</button>
+              <button class="btn btn-sm btn-primary" onclick="saveConnector('openai')">Save</button>
+            </div>
+          </div>
+          
+          <div class="connector-card">
+            <div class="connector-header">
+              <span class="connector-icon anthropic">A</span>
+              <div class="connector-info">
+                <h4>Anthropic</h4>
+                <span class="status connected">● Connected</span>
+              </div>
+            </div>
+            <div class="connector-body">
+              <div class="form-group">
+                <label>API Key</label>
+                <input type="password" placeholder="sk-ant-..." id="anthropic-key">
+              </div>
+              <div class="connector-models">
+                <span class="model-tag">Claude 3.5 Sonnet</span>
+                <span class="model-tag">Claude 3 Opus</span>
+              </div>
+            </div>
+            <div class="connector-footer">
+              <button class="btn btn-sm" onclick="testConnector('anthropic')">Test</button>
+              <button class="btn btn-sm btn-primary" onclick="saveConnector('anthropic')">Save</button>
+            </div>
+          </div>
+          
+          <div class="connector-card">
+            <div class="connector-header">
+              <span class="connector-icon xai">X</span>
+              <div class="connector-info">
+                <h4>xAI (Grok)</h4>
+                <span class="status pending">● Pending</span>
+              </div>
+            </div>
+            <div class="connector-body">
+              <div class="form-group">
+                <label>API Key</label>
+                <input type="password" placeholder="xai-..." id="xai-key">
+              </div>
+              <div class="connector-models">
+                <span class="model-tag">Grok 2</span>
+                <span class="model-tag">Grok Vision</span>
+              </div>
+            </div>
+            <div class="connector-footer">
+              <button class="btn btn-sm" onclick="testConnector('xai')">Test</button>
+              <button class="btn btn-sm btn-primary" onclick="saveConnector('xai')">Save</button>
+            </div>
+          </div>
+          
+          <div class="connector-card">
+            <div class="connector-header">
+              <span class="connector-icon google">G</span>
+              <div class="connector-info">
+                <h4>Google AI</h4>
+                <span class="status pending">● Pending</span>
+              </div>
+            </div>
+            <div class="connector-body">
+              <div class="form-group">
+                <label>API Key</label>
+                <input type="password" placeholder="AIza..." id="google-key">
+              </div>
+              <div class="connector-models">
+                <span class="model-tag">Gemini Pro</span>
+                <span class="model-tag">Gemini Ultra</span>
+              </div>
+            </div>
+            <div class="connector-footer">
+              <button class="btn btn-sm" onclick="testConnector('google')">Test</button>
+              <button class="btn btn-sm btn-primary" onclick="saveConnector('google')">Save</button>
+            </div>
+          </div>
+          
+          <div class="connector-card">
+            <div class="connector-header">
+              <span class="connector-icon stability">S</span>
+              <div class="connector-info">
+                <h4>Stability AI</h4>
+                <span class="status pending">● Pending</span>
+              </div>
+            </div>
+            <div class="connector-body">
+              <div class="form-group">
+                <label>API Key</label>
+                <input type="password" placeholder="sk-..." id="stability-key">
+              </div>
+              <div class="connector-models">
+                <span class="model-tag">SDXL</span>
+                <span class="model-tag">SD3</span>
+              </div>
+            </div>
+            <div class="connector-footer">
+              <button class="btn btn-sm" onclick="testConnector('stability')">Test</button>
+              <button class="btn btn-sm btn-primary" onclick="saveConnector('stability')">Save</button>
+            </div>
+          </div>
+          
+          <div class="connector-card">
+            <div class="connector-header">
+              <span class="connector-icon replicate">R</span>
+              <div class="connector-info">
+                <h4>Replicate</h4>
+                <span class="status pending">● Pending</span>
+              </div>
+            </div>
+            <div class="connector-body">
+              <div class="form-group">
+                <label>API Token</label>
+                <input type="password" placeholder="r8_..." id="replicate-key">
+              </div>
+              <div class="connector-models">
+                <span class="model-tag">Flux</span>
+                <span class="model-tag">Llama</span>
+              </div>
+            </div>
+            <div class="connector-footer">
+              <button class="btn btn-sm" onclick="testConnector('replicate')">Test</button>
+              <button class="btn btn-sm btn-primary" onclick="saveConnector('replicate')">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image Generation Panel -->
+    <div class="panel" id="panel-image-gen">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>🎨 Image Generation</h2>
+          <p>Generiere Bilder im VEGA ANLÆTAN Stil</p>
+        </div>
+        
+        <div class="image-gen-layout">
+          <div class="image-gen-form">
+            <div class="form-group">
+              <label>Prompt</label>
+              <textarea id="image-prompt" rows="4" placeholder="Beschreibe dein Bild im VEGA ANLÆTAN Stil...&#10;&#10;z.B.: Kosmische Resonanzwellen in Gold und Violett, Fibonacci-Spiralen, quantenmechanische Muster, 8D spatial audio visualization..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Style Preset</label>
+              <div class="style-grid">
+                <button class="style-btn active" data-style="vega">Æ VEGA</button>
+                <button class="style-btn" data-style="anlaetan">ANLÆTAN</button>
+                <button class="style-btn" data-style="resonance">Resonance</button>
+                <button class="style-btn" data-style="quantum">Quantum</button>
+                <button class="style-btn" data-style="fibonacci">Fibonacci</button>
+                <button class="style-btn" data-style="cosmic">Cosmic</button>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Size</label>
+                <select id="image-size">
+                  <option value="1024x1024">1024×1024</option>
+                  <option value="1792x1024">1792×1024</option>
+                  <option value="1024x1792">1024×1792</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Engine</label>
+                <select id="image-engine">
+                  <option value="dalle3">DALL-E 3</option>
+                  <option value="sdxl">Stability SDXL</option>
+                  <option value="flux">Replicate Flux</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-lg btn-block" onclick="generateImage()">
+              ✨ Generate Image
+            </button>
+          </div>
+          
+          <div class="image-gen-preview">
+            <div class="preview-placeholder" id="image-preview">
+              <span>🎨</span>
+              <p>Dein generiertes Bild erscheint hier</p>
+            </div>
+            <div class="image-actions" style="display:none" id="image-actions">
+              <button class="btn">⬇ Download</button>
+              <button class="btn">🔄 Variation</button>
+              <button class="btn">✏️ Edit</button>
+              <button class="btn">🔗 Share</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Whitepaper Generator Panel -->
+    <div class="panel" id="panel-whitepaper-gen">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>📄 Whitepaper Generator</h2>
+          <p>Generiere professionelle Whitepapers automatisch</p>
+        </div>
+        
+        <div class="whitepaper-layout">
+          <div class="whitepaper-form">
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" id="wp-title" value="Æ VEGA — Technical Whitepaper">
+            </div>
+            <div class="form-group">
+              <label>Subtitle</label>
+              <input type="text" id="wp-subtitle" value="A Meta-Operating System for AI, Art, and Resonance">
+            </div>
+            <div class="form-group">
+              <label>Sections</label>
+              <div class="checkbox-grid">
+                <label><input type="checkbox" checked> Abstract</label>
+                <label><input type="checkbox" checked> Vision & Philosophy</label>
+                <label><input type="checkbox" checked> Architecture</label>
+                <label><input type="checkbox" checked> Protocols</label>
+                <label><input type="checkbox" checked> Resonance Theory</label>
+                <label><input type="checkbox" checked> ANLÆTAN</label>
+                <label><input type="checkbox"> Tokenomics</label>
+                <label><input type="checkbox" checked> Roadmap</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Output Format</label>
+              <select id="wp-format">
+                <option value="pdf">PDF</option>
+                <option value="md">Markdown</option>
+                <option value="html">HTML</option>
+              </select>
+            </div>
+            <button class="btn btn-primary btn-lg btn-block" onclick="generateWhitepaper()">
+              ✨ Generate Whitepaper
+            </button>
+          </div>
+          
+          <div class="whitepaper-preview">
+            <div class="wp-preview-header">
+              <h3>Æ VEGA</h3>
+              <p>Technical Whitepaper v1.0</p>
+            </div>
+            <div class="wp-preview-content">
+              <div class="wp-section">
+                <h4>01 — Abstract</h4>
+                <p>VEGA represents a paradigm shift in artificial intelligence infrastructure...</p>
+              </div>
+              <div class="wp-section">
+                <h4>02 — Vision & Philosophy</h4>
+                <p>The VEGA Foundation is building the world's first AI, Art, and Resonance platform...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Soundscape Studio Panel -->
+    <div class="panel" id="panel-soundscape">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>🎵 Soundscape Studio</h2>
+          <p>Erstelle binaurale Beats und 8D Audio</p>
+        </div>
+        
+        <div class="studio-layout">
+          <div class="studio-mixer">
+            <div class="mixer-channel">
+              <label>Base Freq</label>
+              <input type="range" min="100" max="1000" value="432" orient="vertical" id="base-freq">
+              <span id="base-freq-val">432 Hz</span>
+            </div>
+            <div class="mixer-channel">
+              <label>Binaural</label>
+              <input type="range" min="1" max="40" value="10" orient="vertical" id="binaural-freq">
+              <span id="binaural-val">10 Hz</span>
+            </div>
+            <div class="mixer-channel">
+              <label>Spatial</label>
+              <input type="range" min="0" max="100" value="80" orient="vertical" id="spatial">
+              <span id="spatial-val">80%</span>
+            </div>
+            <div class="mixer-channel">
+              <label>Reverb</label>
+              <input type="range" min="0" max="100" value="40" orient="vertical" id="reverb">
+              <span id="reverb-val">40%</span>
+            </div>
+            <div class="mixer-channel">
+              <label>Master</label>
+              <input type="range" min="0" max="100" value="70" orient="vertical" id="master-vol">
+              <span id="master-val">70%</span>
+            </div>
+          </div>
+          
+          <div class="studio-visualizer">
+            <canvas id="studio-canvas" width="600" height="300"></canvas>
+          </div>
+          
+          <div class="studio-presets">
+            <h4>Presets</h4>
+            <div class="preset-buttons">
+              <button onclick="loadPreset('alpha')">Alpha Wave (8-12Hz)</button>
+              <button onclick="loadPreset('theta')">Theta Dream (4-8Hz)</button>
+              <button onclick="loadPreset('gamma')">Gamma Focus (30-100Hz)</button>
+              <button onclick="loadPreset('fibonacci')">Fibonacci Spiral</button>
+              <button onclick="loadPreset('solfeggio')">Solfeggio 528Hz</button>
+            </div>
+          </div>
+          
+          <div class="studio-controls">
+            <button class="btn btn-lg" onclick="toggleStudio()">▶ Play</button>
+            <button class="btn" onclick="exportSoundscape()">💾 Export</button>
+            <button class="btn" onclick="savePreset()">📥 Save Preset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agent Manager Panel -->
+    <div class="panel" id="panel-agents">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>🤖 Agent Manager</h2>
+          <p>Verwalte und orchestriere VEGA Agenten</p>
+        </div>
+        
+        <div class="agents-grid" id="agents-grid">
+          <!-- Agents werden dynamisch geladen -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Apps & Auth Panel -->
+    <div class="panel" id="panel-apps">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>📱 Apps & Authentication</h2>
+          <p>Verwalte verbundene Apps und API-Zugriffe</p>
+        </div>
+        
+        <div class="apps-layout">
+          <button class="btn btn-primary" onclick="createApp()">+ Create New App</button>
+          <div class="apps-grid" id="apps-grid">
+            <div class="app-card">
+              <div class="app-icon">Æ</div>
+              <div class="app-info">
+                <h4>VEGA Website</h4>
+                <code>vega-web-001</code>
+              </div>
+              <div class="app-status active">Active</div>
+              <div class="app-actions">
+                <button class="btn btn-sm">Edit</button>
+                <button class="btn btn-sm">Keys</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monitoring Panel -->
+    <div class="panel" id="panel-monitoring">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>📊 System Monitoring</h2>
+          <p>Echtzeit-Überwachung aller VEGA Systeme</p>
+        </div>
+        
+        <div class="monitoring-grid">
+          <div class="metric-card">
+            <div class="metric-value" id="metric-agents">27</div>
+            <div class="metric-label">Active Agents</div>
+            <div class="metric-trend up">↑ 12%</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-requests">1.2K</div>
+            <div class="metric-label">API Requests/hr</div>
+            <div class="metric-trend up">↑ 8%</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-latency">42ms</div>
+            <div class="metric-label">Avg Latency</div>
+            <div class="metric-trend down">↓ 15%</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="metric-uptime">99.9%</div>
+            <div class="metric-label">Uptime</div>
+            <div class="metric-trend neutral">→</div>
+          </div>
+        </div>
+        
+        <div class="monitoring-charts">
+          <canvas id="monitoring-chart" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documentation Panel -->
+    <div class="panel" id="panel-docs">
+      <div class="panel-content">
+        <div class="section-header">
+          <h2>📚 Documentation</h2>
+          <p>VEGA System Dokumentation</p>
+        </div>
+        
+        <div class="docs-grid">
+          <a href="https://github.com/vegafoundation/VEGA/blob/main/docs/ARCHITECTURE.md" target="_blank" class="doc-card">
+            <span class="doc-icon">🏛️</span>
+            <h4>Architecture</h4>
+            <p>7-Layer Meta-OS</p>
+          </a>
+          <a href="https://github.com/vegafoundation/VEGA/blob/main/protocols/AMP.md" target="_blank" class="doc-card">
+            <span class="doc-icon">📋</span>
+            <h4>AMP Protocol</h4>
+            <p>Agent Management</p>
+          </a>
+          <a href="https://github.com/vegafoundation/VEGA/blob/main/docs/VRC.md" target="_blank" class="doc-card">
+            <span class="doc-icon">🌀</span>
+            <h4>VRC Module</h4>
+            <p>Resonance Core</p>
+          </a>
+          <a href="https://github.com/vegafoundation/VEGA/blob/main/docs/PRD_VEGA.md" target="_blank" class="doc-card">
+            <span class="doc-icon">📄</span>
+            <h4>PRD</h4>
+            <p>Product Requirements</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

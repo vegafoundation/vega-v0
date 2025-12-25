@@ -1,0 +1,55 @@
+{
+  "name": "vega-v0",
+  "version": "1.0.0",
+  "description": "Æ VEGA — Next Generation Deployment Platform with Resonance Core",
+  "main": "index.html",
+  "scripts": {
+    "dev": "node backend/server.js",
+    "dev:static": "python -m http.server 3000",
+    "build": "echo 'Building with Æ Resonance...' && cp -r . dist/",
+    "deploy": "vercel --prod",
+    "deploy:resonance": "vercel --prod --resonance",
+    "server": "node backend/server.js",
+    "vega-init": "node scripts/init-vega.js",
+    "test": "echo 'Testing with Fibonacci optimization...'",
+    "test:fibonacci": "node scripts/test-fibonacci.js",
+    "analyze": "node scripts/analyze-resonance.js",
+    "chat": "node scripts/start-chat.js",
+    "resonance": "node api/agents.js"
+  },
+  "keywords": [
+    "vega",
+    "deployment",
+    "ai",
+    "resonance",
+    "fibonacci",
+    "trinity",
+    "vercel-inspired",
+    "next-gen",
+    "Æ",
+    "anlaetan"
+  ],
+  "author": "ADAM EREN VEGA — Æ",
+  "license": "Resonance License v1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vegafoundation/vega-v0.git"
+  },
+  "homepage": "https://vega-v0.vercel.app",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {},
+  "vega": {
+    "resonance": true,
+    "fibonacci": 8,
+    "trinity": ["Alpha", "Vega", "Omega"],
+    "frequencies": [432, 528, 963],
+    "version": "v0.1.0"
+  }
+}

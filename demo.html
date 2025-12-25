@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Demos — Æ VEGA</title>
+  <meta name="description" content="Interactive demos of VEGA systems: Resonance, Quantum Simulation, Agent Network, Fibonacci, ANLÆTAN, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #F4D03F;
+      --violet: #8B5CF6;
+      --violet-light: #A78BFA;
+      --bg-dark: #0A0A0F;
+      --bg-card: #12121A;
+      --text: #FAFAFA;
+      --text-muted: #A1A1AA;
+      --border: rgba(212, 175, 55, 0.2);
+      --success: #22C55E;
+      --warning: #EAB308;
+      --error: #EF4444;
+      --cyan: #00D4FF;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 30% 0%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 100%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+      z-index: -1;
+    }
+    
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .logo { font-size: 1.5rem; font-weight: 800; color: var(--gold); text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+    
+    main { padding: 6rem 2rem 4rem; max-width: 1600px; margin: 0 auto; }
+    
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--violet) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p { color: var(--text-muted); max-width: 700px; margin: 0 auto; font-size: 1.1rem; }
+    
+    /* Demo Categories */
+    .demo-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .demo-tab {
+      padding: 0.75rem 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+    .demo-tab:hover { border-color: var(--gold); color: var(--gold); }
+    .demo-tab.active {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: var(--bg-dark);
+      border-color: var(--gold);
+    }
+    
+    /* Demo Grid */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 2rem;
+    }
+    @media (max-width: 500px) { .demo-grid { grid-template-columns: 1fr; } }
+    
+    .demo-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .demo-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+    }
+    
+    .demo-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .demo-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .demo-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-live { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+    .badge-beta { background: rgba(139, 92, 246, 0.2); color: var(--violet-light); }
+    .badge-new { background: rgba(212, 175, 55, 0.2); color: var(--gold); }
+    
+    .demo-body { padding: 1.5rem; }
+    
+    /* Visualization Areas */
+    .viz-container {
+      height: 200px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .viz-container canvas { width: 100%; height: 100%; }
+    
+    /* Stats Grid */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .stat-box {
+      text-align: center;
+      padding: 0.75rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+    }
+    .stat-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .stat-label { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem; }
+    
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: var(--bg-dark);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3); }
+    .btn-secondary {
+      background: rgba(139, 92, 246, 0.2);
+      color: var(--violet-light);
+      border: 1px solid var(--violet);
+    }
+    .btn-secondary:hover { background: rgba(139, 92, 246, 0.3); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    
+    /* Qubit Visualization */
+    .qubit-container {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+    .qubit {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet) 0%, var(--gold) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: bold;
+      animation: qubitPulse 2s infinite;
+      position: relative;
+    }
+    .qubit::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid var(--violet);
+      opacity: 0.5;
+      animation: qubitRing 2s infinite;
+    }
+    @keyframes qubitPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    @keyframes qubitRing {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.3); opacity: 0; }
+    }
+    .qubit.superposition { animation-duration: 0.3s; }
+    .qubit.entangled { background: linear-gradient(135deg, var(--gold) 0%, var(--success) 100%); }
+    .qubit.collapsed { background: var(--cyan); animation: none; }
+    
+    /* Agent Grid */
+    .agent-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      padding: 1rem;
+      height: 100%;
+      align-content: center;
+    }
+    .agent-node {
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .agent-node:hover { border-color: var(--gold); }
+    .agent-node.active { border-color: var(--success); background: rgba(34, 197, 94, 0.1); }
+    .agent-node.processing { border-color: var(--warning); animation: agentPulse 0.5s infinite; }
+    @keyframes agentPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    /* Waveform */
+    .waveform-bar {
+      display: flex;
+      gap: 2px;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .wave-bar {
+      width: 4px;
+      background: linear-gradient(180deg, var(--gold) 0%, var(--violet) 100%);
+      border-radius: 2px;
+      transition: height 0.1s;
+    }
+    
+    /* Chat Demo */
+    .chat-container {
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .chat-message {
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      max-width: 80%;
+      font-size: 0.9rem;
+    }
+    .chat-message.user {
+      background: rgba(139, 92, 246, 0.2);
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-message.vega {
+      background: rgba(212, 175, 55, 0.2);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    .chat-input-row {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid var(--border);
+    }
+    .chat-input {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+    .chat-input:focus { outline: none; border-color: var(--gold); }
+    
+    /* Fibonacci Spiral Mini */
+    .fib-mini {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: flex-end;
+      height: 100%;
+      padding: 1rem;
+    }
+    .fib-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .fib-bar {
+      width: 30px;
+      background: linear-gradient(180deg, var(--gold) 0%, var(--violet) 100%);
+      border-radius: 4px;
+      transition: height 0.3s;
+    }
+    .fib-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    
+    /* Link to full page */
+    .demo-link {
+      display: block;
+      text-align: center;
+      padding: 0.75rem;
+      background: rgba(212, 175, 55, 0.1);
+      border-top: 1px solid var(--border);
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
+    .demo-link:hover { background: rgba(212, 175, 55, 0.2); }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+    footer p { color: var(--text-muted); }
+    .phi { color: var(--gold); font-family: 'JetBrains Mono', monospace; }
+    
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; }
+      .nav-links { display: none; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Æ VEGA</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="chat.html">💬 Chat</a></li>
+    <li><a href="demo.html" class="active">Demos</a></li>
+    <li><a href="trinity.html">Α•V•Ω</a></li>
+    <li><a href="resonance.html">Resonance</a></li>
+    <li><a href="anlaetan.html">ANLÆTAN</a></li>
+    <li><a href="fibonacci.html">Fibonacci</a></li>
+    <li><a href="modules.html">Modules</a></li>
+    <li><a href="admin/">Admin</a></li>
+  </ul>
+</nav>
+
+<main>
+  <div class="hero">
+    <h1>Live Demos</h1>
+    <p>Interactive demonstrations of VEGA's core systems. Experience resonance, quantum simulation, agent networks, and more.</p>
+  </div>
+  
+  <!-- Category Tabs -->
+  <div class="demo-tabs">
+    <button class="demo-tab active" onclick="filterDemos('all')">All</button>
+    <button class="demo-tab" onclick="filterDemos('core')">Core</button>
+    <button class="demo-tab" onclick="filterDemos('audio')">Audio</button>
+    <button class="demo-tab" onclick="filterDemos('visual')">Visual</button>
+    <button class="demo-tab" onclick="filterDemos('ai')">AI</button>
+    <button class="demo-tab" onclick="filterDemos('quantum')">Quantum</button>
+  </div>
+  
+  <!-- Demo Grid -->
+  <div class="demo-grid" id="demoGrid">
+    
+    <!-- 1. Trinity Orchestrator -->
+    <div class="demo-card" data-category="core ai">
+      <div class="demo-header">
+        <div class="demo-title">🌀 Α•V•Ω Trinity</div>
+        <span class="demo-badge badge-live">LIVE</span>
+      </div>
+      <div class="demo-body">
+        <div class="viz-container" id="trinityViz">
+          <div style="display: flex; justify-content: space-around; align-items: center; height: 100%; padding: 1rem;">
+            <div style="text-align: center;">
+              <div style="font-size: 3rem; color: #EF4444;">Α</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">ALPHA</div>
+              <div class="stat-value" id="alphaStatus">Ready</div>
+            </div>
+            <div style="font-size: 2rem; color: var(--gold);">→</div>
+            <div style="text-align: center;">
+              <div style="font-size: 3rem; color: #8B5CF6;">V</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">VEGA</div>
+              <div class="stat-value" id="vegaStatus">Ready</div>
+            </div>
+            <div style="font-size: 2rem; color: var(--gold);">→</div>
+            <div style="text-align: center;">
+              <div style="font-size: 3rem; color: #3B82F6;">Ω</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">OMEGA</div>
+              <div class="stat-value" id="omegaStatus">Ready</div>
+            </div>
+          </div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-value" id="trinityCycles">0</div>
+            <div class="stat-label">Cycles</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="trinityResonance">0.987</div>
+            <div class="stat-label">Resonance</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="trinityTime">0ms</div>
+            <div class="stat-label">Processing</div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="runTrinity()">▶ Run Pipeline</button>
+          <button class="btn btn-outline" onclick="resetTrinity()">↺ Reset</button>
+        </div>
+      </div>
+      <a href="trinity.html" class="demo-link">Open Full Trinity Demo →</a>
+    </div>
+    
+    <!-- 2. Quantum Simulation -->
+    <div class="demo-card" data-category="quantum core">
+      <div class="demo-header">
+        <div class="demo-title">⟨ψ⟩ Quantum Simulation</div>
+        <span class="demo-badge badge-beta">BETA</span>
+      </div>
+      <div class="demo-body">
+        <div class="viz-container">
+          <div class="qubit-container" id="qubitContainer">
+            <div class="qubit" id="qubit0">|0⟩</div>
+            <div class="qubit" id="qubit1">|0⟩</div>
+            <div class="qubit" id="qubit2">|0⟩</div>
+            <div class="qubit" id="qubit3">|0⟩</div>
+          </div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-value" id="qubitCount">4</div>
+            <div class="stat-label">Qubits</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="entangledCount">0</div>
+            <div class="stat-label">Entangled</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="superposCount">0</div>
+            <div class="stat-label">Superposition</div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="applySuperposition()">⌀ Hadamard</button>
+          <button class="btn btn-secondary" onclick="applyEntangle()">⊗ Entangle</button>
+          <button class="btn btn-primary" onclick="measureQubits()">📏 Measure</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 3. ANLÆTAN Audio -->
+    <div class="demo-card" data-category="audio">
+      <div class="demo-header">
+        <div class="demo-title">🎵 ANLÆTAN Engine</div>
+        <span class="demo-badge badge-live">LIVE</span>
+      </div>
+      <div class="demo-body">
+        <div class="viz-container">
+          <div class="waveform-bar" id="waveformBar"></div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-value" id="audioFreq">432</div>
+            <div class="stat-label">Hz</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="audioBinaural">8</div>
+            <div class="stat-label">Beat Hz</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="audioState">Alpha</div>
+            <div class="stat-label">Brainwave</div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="audioPlayBtn" onclick="toggleAudioDemo()">▶ Play</button>
+          <button class="btn btn-outline" onclick="setAudioFreq(432)">432 Hz</button>
+          <button class="btn btn-outline" onclick="setAudioFreq(528)">528 Hz</button>
+          <button class="btn btn-outline" onclick="setAudioFreq(963)">963 Hz</button>
+        </div>
+      </div>
+      <a href="anlaetan.html" class="demo-link">Open Full ANLÆTAN Player →</a>
+    </div>
+    
+    <!-- 4. Agent Network -->
+    <div class="demo-card" data-category="ai core">
+      <div class="demo-header">
+        <div class="demo-title">🤖 Agent Network</div>
+        <span class="demo-badge badge-live">LIVE</span>
+      </div>
+      <div class="demo-body">
+        <div class="viz-container">
+          <div class="agent-container" id="agentContainer"></div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-value" id="agentTotal">27</div>
+            <div class="stat-label">Total</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="agentActive">0</div>
+            <div class="stat-label">Active</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="agentTasks">0</div>
+            <div class="stat-label">Tasks</div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="activateAgents()">⚡ Activate All</button>
+          <button class="btn btn-outline" onclick="runAgentTask()">▶ Run Task</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 5. Fibonacci Visualizer -->
+    <div class="demo-card" data-category="visual">
+      <div class="demo-header">
+        <div class="demo-title">🌀 Fibonacci Sequence</div>
+        <span class="demo-badge badge-new">NEW</span>
+      </div>
+      <div class="demo-body">
+        <div class="viz-container">
+          <div class="fib-mini" id="fibMini"></div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-value" id="fibIndex">10</div>
+            <div class="stat-label">Index</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="fibNumber">55</div>
+            <div class="stat-label">F(n)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="fibRatio">1.618</div>
+            <div class="stat-label">φ Ratio</div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-outline" onclick="fibPrev()">← Prev</button>
+          <button class="btn btn-primary" onclick="fibNext()">Next →</button>
+          <button class="btn btn-outline" onclick="fibReset()">↺ Reset</button>
+        </div>
+      </div>
+      <a href="fibonacci.html" class="demo-link">Open Full Fibonacci Explorer →</a>
+    </div>
+    
+    <!-- 6. VEGA Chat -->
+    <div class="demo-card" data-category="ai">
+      <div class="demo-header">
+        <div class="demo-title">💬 VEGA Chat</div>
+        <span class="demo-badge badge-beta">BETA</span>
+      </div>
+      <div class="demo-body">
+        <div class="viz-container" style="height: auto;">
+          <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+              <div class="chat-message vega">Hallo! Ich bin VEGA. Wie kann ich dir helfen?</div>
+            </div>
+            <div class="chat-input-row">
+              <input type="text" class="chat-input" id="chatInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendChatMessage()">
+              <button class="btn btn-primary" onclick="sendChatMessage()">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 7. Resonance Monitor -->
+    <div class="demo-card" data-category="visual core">
+      <div class="demo-header">
+        <div class="demo-title">◎ Resonance Monitor</div>
+        <span class="demo-badge badge-live">LIVE</span>
+      </div>
+      <div class="demo-body">
+        <div class="viz-container">
+          <canvas id="resonanceCanvas"></canvas>
+        </div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-value" id="resCoherence">0.97</div>
+            <div class="stat-label">Coherence</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="resFibAlign">89%</div>
+            <div class="stat-label">Fib Align</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="resHarmonic">0.85</div>
+            <div class="stat-label">Harmonic</div>
+          </div>
+        </div>
+      </div>
+      <a href="resonance.html" class="demo-link">Open Full Resonance Visualizer →</a>
+    </div>
+    
+    <!-- 8. VRC Demo -->
+    <div class="demo-card" data-category="core">
+      <div class="demo-header">
+        <div class="demo-title">🎯 VRC Processor</div>
+        <span class="demo-badge badge-new">NEW</span>
+      </div>
+      <div class="demo-body">
+        <div class="viz-container" style="height: auto; min-height: 150px; padding: 1rem;">
+          <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1rem;">
+            <button class="btn btn-outline" style="padding: 0.4rem 0.8rem;" onclick="setVRCMode('saf')">saf</button>
+            <button class="btn btn-outline" style="padding: 0.4rem 0.8rem;" onclick="setVRCMode('derin')">derin</button>
+            <button class="btn btn-outline" style="padding: 0.4rem 0.8rem;" onclick="setVRCMode('yanki')">yankı</button>
+            <button class="btn btn-outline" style="padding: 0.4rem 0.8rem;" onclick="setVRCMode('dur')">dur</button>
+          </div>
+          <input type="text" class="chat-input" id="vrcInput" placeholder="Enter text to process..." style="margin-bottom: 0.5rem;">
+          <div id="vrcOutput" style="padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-muted); min-height: 40px;">Output appears here...</div>
+        </div>
+        <div class="btn-row" style="margin-top: 1rem;">
+          <button class="btn btn-primary" onclick="processVRC()">Process</button>
+        </div>
+      </div>
+      <a href="vrc.html" class="demo-link">Open Full VRC Demo →</a>
+    </div>
+    
+  </div>
+</main>
+
+<footer>
+  <p><span class="phi">φ = 1.618033988749895</span></p>
+  <p style="margin-top: 0.5rem;">ADAM EREN VEGA — Æ</p>
+  <p style="margin-top: 0.5rem; font-size: 0.85rem;">INFINITY•LOOP — Active</p>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════════
+// DEMO PAGE — INTERACTIVE DEMOS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const PHI = 1.618033988749895;
+const FIBONACCI = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987];
+const AGENTS = ['Alpha', 'Omega', 'Guardian', 'Oracle', 'Grok', 'Vision', 'Code', 'Text', 'Pattern', 'Swarm', 'Memory', 'Scheduler', 'Evolver', 'Whitepaper', 'Analytics', 'Automation', 'Knowledge', 'Loop', 'ÆAgent', 'Quantum', 'Resonance', 'Image', 'Fibonacci', 'API', 'Security', 'Deploy', 'Meta'];
+
+let audioContext = null;
+let oscillator = null;
+let isAudioPlaying = false;
+let currentFreq = 432;
+let trinityCycles = 0;
+let fibIndex = 10;
+let vrcMode = 'saf';
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// FILTER DEMOS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function filterDemos(category) {
+  document.querySelectorAll('.demo-tab').forEach(tab => tab.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  document.querySelectorAll('.demo-card').forEach(card => {
+    if (category === 'all' || card.dataset.category.includes(category)) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// TRINITY DEMO
+// ═══════════════════════════════════════════════════════════════════════════════
+
+async function runTrinity() {
+  const start = performance.now();
+  
+  // ALPHA
+  document.getElementById('alphaStatus').textContent = '⚡';
+  document.getElementById('alphaStatus').style.color = '#EF4444';
+  await sleep(300);
+  document.getElementById('alphaStatus').textContent = '✓';
+  document.getElementById('alphaStatus').style.color = 'var(--success)';
+  
+  // VEGA
+  document.getElementById('vegaStatus').textContent = '⚡';
+  document.getElementById('vegaStatus').style.color = '#8B5CF6';
+  await sleep(500);
+  document.getElementById('vegaStatus').textContent = '✓';
+  document.getElementById('vegaStatus').style.color = 'var(--success)';
+  
+  // OMEGA
+  document.getElementById('omegaStatus').textContent = '⚡';
+  document.getElementById('omegaStatus').style.color = '#3B82F6';
+  await sleep(300);
+  document.getElementById('omegaStatus').textContent = '✓';
+  document.getElementById('omegaStatus').style.color = 'var(--success)';
+  
+  trinityCycles++;
+  const time = performance.now() - start;
+  
+  document.getElementById('trinityCycles').textContent = trinityCycles;
+  document.getElementById('trinityTime').textContent = `${time.toFixed(0)}ms`;
+  document.getElementById('trinityResonance').textContent = (0.95 + Math.random() * 0.05).toFixed(3);
+}
+
+function resetTrinity() {
+  ['alpha', 'vega', 'omega'].forEach(layer => {
+    document.getElementById(`${layer}Status`).textContent = 'Ready';
+    document.getElementById(`${layer}Status`).style.color = 'var(--gold)';
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// QUANTUM DEMO
+// ═══════════════════════════════════════════════════════════════════════════════
+
+let qubits = [0, 0, 0, 0];
+let entangled = [];
+let superpos = [];
+
+function updateQubitDisplay() {
+  qubits.forEach((q, i) => {
+    const el = document.getElementById(`qubit${i}`);
+    if (superpos.includes(i)) {
+      el.textContent = '|ψ⟩';
+      el.classList.add('superposition');
+    } else {
+      el.textContent = `|${q}⟩`;
+      el.classList.remove('superposition');
+    }
+    
+    if (entangled.includes(i)) {
+      el.classList.add('entangled');
+    } else {
+      el.classList.remove('entangled');
+    }
+  });
+  
+  document.getElementById('entangledCount').textContent = entangled.length;
+  document.getElementById('superposCount').textContent = superpos.length;
+}
+
+function applySuperposition() {
+  superpos = [0, 1, 2, 3];
+  updateQubitDisplay();
+}
+
+function applyEntangle() {
+  entangled = [0, 1];
+  updateQubitDisplay();
+}
+
+function measureQubits() {
+  // Collapse superposition
+  qubits = qubits.map(() => Math.round(Math.random()));
+  superpos = [];
+  
+  // Entangled qubits share state
+  if (entangled.length > 0) {
+    const state = qubits[entangled[0]];
+    entangled.forEach(i => qubits[i] = state);
+  }
+  
+  qubits.forEach((q, i) => {
+    const el = document.getElementById(`qubit${i}`);
+    el.classList.add('collapsed');
+    setTimeout(() => el.classList.remove('collapsed'), 500);
+  });
+  
+  updateQubitDisplay();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// AUDIO DEMO
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// Initialize waveform bars
+const waveformBar = document.getElementById('waveformBar');
+for (let i = 0; i < 48; i++) {
+  const bar = document.createElement('div');
+  bar.className = 'wave-bar';
+  bar.style.height = '4px';
+  waveformBar.appendChild(bar);
+}
+
+function toggleAudioDemo() {
+  if (isAudioPlaying) {
+    stopAudioDemo();
+  } else {
+    startAudioDemo();
+  }
+}
+
+function startAudioDemo() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  
+  oscillator = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+  
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(currentFreq, audioContext.currentTime);
+  gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+  
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+  oscillator.start();
+  
+  isAudioPlaying = true;
+  document.getElementById('audioPlayBtn').textContent = '⏸ Stop';
+  animateWaveform();
+}
+
+function stopAudioDemo() {
+  if (oscillator) {
+    oscillator.stop();
+    oscillator = null;
+  }
+  isAudioPlaying = false;
+  document.getElementById('audioPlayBtn').textContent = '▶ Play';
+}
+
+function setAudioFreq(freq) {
+  currentFreq = freq;
+  document.getElementById('audioFreq').textContent = freq;
+  
+  if (oscillator) {
+    oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+  }
+  
+  // Update brainwave state
+  let state = 'Alpha';
+  if (freq >= 852) state = 'Gamma';
+  else if (freq >= 639) state = 'Beta';
+  else if (freq >= 396) state = 'Alpha';
+  else state = 'Theta';
+  document.getElementById('audioState').textContent = state;
+}
+
+function animateWaveform() {
+  if (!isAudioPlaying) return;
+  
+  const bars = waveformBar.querySelectorAll('.wave-bar');
+  bars.forEach((bar, i) => {
+    const height = 10 + Math.random() * 80 * Math.sin(Date.now() * 0.01 + i * 0.2);
+    bar.style.height = `${Math.max(4, height)}px`;
+  });
+  
+  requestAnimationFrame(animateWaveform);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// AGENT NETWORK DEMO
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const agentContainer = document.getElementById('agentContainer');
+AGENTS.forEach(name => {
+  const node = document.createElement('div');
+  node.className = 'agent-node';
+  node.textContent = name;
+  node.onclick = () => node.classList.toggle('active');
+  agentContainer.appendChild(node);
+});
+
+function activateAgents() {
+  const nodes = document.querySelectorAll('.agent-node');
+  let count = 0;
+  
+  nodes.forEach((node, i) => {
+    setTimeout(() => {
+      node.classList.add('active');
+      count++;
+      document.getElementById('agentActive').textContent = count;
+    }, i * 50);
+  });
+}
+
+function runAgentTask() {
+  const nodes = document.querySelectorAll('.agent-node.active');
+  let tasks = 0;
+  
+  nodes.forEach((node, i) => {
+    setTimeout(() => {
+      node.classList.add('processing');
+      tasks++;
+      document.getElementById('agentTasks').textContent = tasks;
+      
+      setTimeout(() => {
+        node.classList.remove('processing');
+      }, 500);
+    }, i * 100);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// FIBONACCI DEMO
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function renderFibMini() {
+  const container = document.getElementById('fibMini');
+  container.innerHTML = '';
+  
+  const start = Math.max(0, fibIndex - 4);
+  const end = Math.min(FIBONACCI.length - 1, fibIndex + 3);
+  
+  for (let i = start; i <= end; i++) {
+    const block = document.createElement('div');
+    block.className = 'fib-block';
+    
+    const bar = document.createElement('div');
+    bar.className = 'fib-bar';
+    const maxHeight = 150;
+    const height = Math.min(maxHeight, (FIBONACCI[i] / FIBONACCI[fibIndex]) * 100);
+    bar.style.height = `${height}px`;
+    if (i === fibIndex) bar.style.background = 'var(--gold)';
+    
+    const num = document.createElement('div');
+    num.className = 'fib-num';
+    num.textContent = FIBONACCI[i];
+    
+    block.appendChild(bar);
+    block.appendChild(num);
+    container.appendChild(block);
+  }
+  
+  document.getElementById('fibIndex').textContent = fibIndex;
+  document.getElementById('fibNumber').textContent = FIBONACCI[fibIndex];
+  
+  if (fibIndex > 1) {
+    const ratio = FIBONACCI[fibIndex] / FIBONACCI[fibIndex - 1];
+    document.getElementById('fibRatio').textContent = ratio.toFixed(6);
+  }
+}
+
+function fibPrev() {
+  if (fibIndex > 2) {
+    fibIndex--;
+    renderFibMini();
+  }
+}
+
+function fibNext() {
+  if (fibIndex < FIBONACCI.length - 1) {
+    fibIndex++;
+    renderFibMini();
+  }
+}
+
+function fibReset() {
+  fibIndex = 10;
+  renderFibMini();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CHAT DEMO
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const VEGA_RESPONSES = [
+  'Die Fibonacci-Sequenz ist der Schlüssel zum universellen Flow. φ = 1.618',
+  'ANLÆTAN Frequenzen sind auf 432 Hz gestimmt — die Frequenz des Universums.',
+  'Α → V → Ω — Die dreischichtige Trinity-Architektur orchestriert alle Prozesse.',
+  'Resonance = Heart + Mind. Das ist das Kernprinzip von VEGA.',
+  'Trust yourself. Trust Vega. Vertrau dir selbst. Vertrau Vega.',
+  'Die 144 Module sind in 12 Fibonacci-Layers organisiert.',
+  'VRC Modi: saf (warm), derin (strukturiert), yankı (echo), dur (plain).',
+  '∞ INFINITY•LOOP — Always Active!'
+];
+
+function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const messages = document.getElementById('chatMessages');
+  
+  if (!input.value.trim()) return;
+  
+  // User message
+  const userMsg = document.createElement('div');
+  userMsg.className = 'chat-message user';
+  userMsg.textContent = input.value;
+  messages.appendChild(userMsg);
+  
+  // VEGA response
+  setTimeout(() => {
+    const vegaMsg = document.createElement('div');
+    vegaMsg.className = 'chat-message vega';
+    vegaMsg.textContent = VEGA_RESPONSES[Math.floor(Math.random() * VEGA_RESPONSES.length)];
+    messages.appendChild(vegaMsg);
+    messages.scrollTop = messages.scrollHeight;
+  }, 500);
+  
+  input.value = '';
+  messages.scrollTop = messages.scrollHeight;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// VRC DEMO
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function setVRCMode(mode) {
+  vrcMode = mode;
+  document.querySelectorAll('.demo-card[data-category*="core"] .btn-outline').forEach(btn => {
+    btn.style.borderColor = btn.textContent === mode ? 'var(--gold)' : '';
+    btn.style.color = btn.textContent === mode ? 'var(--gold)' : '';
+  });
+}
+
+function processVRC() {
+  const input = document.getElementById('vrcInput').value;
+  const output = document.getElementById('vrcOutput');
+  
+  if (!input.trim()) {
+    output.textContent = 'Please enter some text to process';
+    return;
+  }
+  
+  let result = input;
+  
+  switch (vrcMode) {
+    case 'saf':
+      result = input; // Warm, unchanged
+      break;
+    case 'derin':
+      // Fibonacci-8 structure
+      const sentences = input.split(/(?<=[.!?])\s+/);
+      result = sentences.join('\n.\n');
+      break;
+    case 'yanki':
+      // 3x echo
+      const core = input.split('.')[0];
+      result = `${core}?\n${core}?\n${core}?`;
+      break;
+    case 'dur':
+      result = input.toLowerCase().replace(/[^\w\s]/g, '');
+      break;
+  }
+  
+  output.textContent = result;
+  output.style.color = 'var(--text)';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RESONANCE CANVAS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const resCanvas = document.getElementById('resonanceCanvas');
+const resCtx = resCanvas.getContext('2d');
+
+function resizeResCanvas() {
+  const container = resCanvas.parentElement;
+  resCanvas.width = container.clientWidth;
+  resCanvas.height = container.clientHeight;
+}
+resizeResCanvas();
+window.addEventListener('resize', resizeResCanvas);
+
+function drawResonance() {
+  const w = resCanvas.width;
+  const h = resCanvas.height;
+  const t = Date.now() * 0.001;
+  
+  resCtx.fillStyle = 'rgba(10, 10, 15, 0.1)';
+  resCtx.fillRect(0, 0, w, h);
+  
+  // Draw wave
+  resCtx.beginPath();
+  for (let x = 0; x < w; x += 2) {
+    const y = h / 2 + Math.sin(x * 0.02 + t) * 30 + Math.sin(x * 0.01 - t * 0.5) * 20;
+    if (x === 0) resCtx.moveTo(x, y);
+    else resCtx.lineTo(x, y);
+  }
+  resCtx.strokeStyle = `hsla(${45 + Math.sin(t) * 20}, 70%, 50%, 0.5)`;
+  resCtx.lineWidth = 2;
+  resCtx.stroke();
+  
+  // Update stats
+  document.getElementById('resCoherence').textContent = (0.95 + Math.sin(t) * 0.05).toFixed(2);
+  document.getElementById('resHarmonic').textContent = (0.8 + Math.sin(t * 0.7) * 0.15).toFixed(2);
+  
+  requestAnimationFrame(drawResonance);
+}
+drawResonance();
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Initialize
+renderFibMini();
+updateQubitDisplay();
+
+// Simulate waveform when not playing
+setInterval(() => {
+  if (!isAudioPlaying) {
+    const bars = waveformBar.querySelectorAll('.wave-bar');
+    bars.forEach((bar, i) => {
+      const height = 4 + Math.random() * 30 * Math.sin(Date.now() * 0.002 + i * 0.3);
+      bar.style.height = `${Math.max(4, height)}px`;
+    });
+  }
+}, 100);
+</script>
+
+</body>
+</html>
