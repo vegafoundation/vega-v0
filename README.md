@@ -44,6 +44,30 @@ await vega.deploy(project, {
 });
 ```
 
+### 🚀 **Æ VEGA Server**
+```javascript
+// Start the full Æ VEGA experience
+npm run dev
+
+// API Endpoints
+GET  /api/health      // System status
+GET  /api/resonance   // Real-time resonance data
+GET  /api/events      // SSE real-time updates
+POST /api/deploy      // Deploy with resonance
+```
+
+### 💎 **Time Crystal Persistence**
+```json
+{
+  "crystal": {
+    "resonance": 97,
+    "fibonacci": 8,
+    "trinity": ["Alpha", "Vega", "Omega"],
+    "state": "active"
+  }
+}
+```
+
 ### 🌀 **Fibonacci-8 Deployment Algorithm**
 - **Phase 1-3**: Initialization & Analysis
 - **Phase 4-5**: Optimization & Testing
@@ -73,11 +97,17 @@ cd vega-v0
 # Install dependencies
 npm install
 
-# Start development server
+# Start Æ VEGA Server (Backend + Frontend)
 npm run dev
+
+# Alternative: Start static server only
+npm run dev:static
 
 # Deploy to Æ VEGA
 npm run deploy
+
+# Check resonance levels
+curl http://localhost:5000/api/health
 ```
 
 ### Advanced Setup
@@ -120,22 +150,37 @@ chat.on('resonance', (level) => {
 ## 🏗️ **Architecture**
 
 ```
-Æ VEGA Platform
-├── 🎯 VRC Core (Vega Resonance Core)
-│   ├── Fibonacci-8 Algorithm
+Æ VEGA Platform v0.1.0
+├── 🌀 VRC Core (Vega Resonance Core)
+│   ├── Fibonacci-8 Algorithm Engine
 │   ├── Trinity Processing (Α•V•Ω)
-│   └── Resonance Engine
+│   ├── Resonance Engine (97% accuracy)
+│   └── Time Crystal State
+├── ⚙️ Backend Server (Express)
+│   ├── Real-time SSE Updates
+│   ├── Multi-AI Orchestration API
+│   ├── Resonance Health Monitoring
+│   └── Deployment Endpoints
 ├── 🎨 Frontend Experience
-│   ├── Immersive UI
-│   ├── Audio Integration
-│   └── Interactive Chat
+│   ├── Immersive Æ UI
+│   ├── Interactive Onboarding
+│   ├── ANLÆTAN Audio Integration
+│   ├── Live Chat with Tutorials
+│   └── Particle Animations
 ├── 🚀 Deployment Engine
-│   ├── Vercel-Inspired DX
-│   ├── AI-Optimized Builds
-│   └── Global CDN
+│   ├── Vercel Integration
+│   ├── Resonance-Optimized Builds
+│   ├── Global CDN Distribution
+│   └── Auto-scaling
+├── 💎 Time Crystal Persistence
+│   ├── JSON State Management
+│   ├── Auto-backup System
+│   ├── Resonance History
+│   └── Fibonacci Metrics
 └── 📊 Analytics & Learning
-    ├── Resonance Metrics
-    ├── Fibonacci Optimization
+    ├── Real-time Resonance Tracking
+    ├── Fibonacci Optimization Metrics
+    ├── Trinity Balance Analysis
     └── Continuous Evolution
 ```
 
